@@ -11,10 +11,53 @@ class TasksCalendarScreen extends StatefulWidget {
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   var data;
 
+  List<Widget> allTasks = [
+    calendarEvent(
+      "24th",
+      "March",
+      "",
+      "Create Time Table for Class I",
+      "Deadline",
+      "3 Days left",
+      true,
+      false,
+    ),
+    calendarEvent(
+      "31st",
+      "March",
+      "",
+      "Create Geography Quiz for Class X",
+      "Deadline",
+      "10 Days left",
+      true,
+      true,
+    ),
+    calendarEvent(
+      "28th",
+      "March",
+      "",
+      "Decide Class X Farewell Food Menu",
+      "Deadline",
+      "7 Days left",
+      true,
+      true,
+    ),
+  ];
+
   callback(newData) {
     setState(() {
-      data = newData;
-      print(newData);
+      allTasks.add(
+        calendarEvent(
+          "${newData['deadline']}st",
+          "March",
+          "",
+          "Create Geography Quiz for Class X",
+          "Deadline",
+          "10 Days left",
+          true,
+          true,
+        ),
+      );
     });
   }
 
@@ -57,38 +100,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                             ),
                           ),
                           child: Column(
-                            children: <Widget>[
-                              calendarEvent(
-                                "24th",
-                                "March",
-                                "",
-                                "Create Time Table for Class I",
-                                "Deadline",
-                                "3 Days left",
-                                true,
-                                false,
-                              ),
-                              calendarEvent(
-                                "31st",
-                                "March",
-                                "",
-                                "Create Geography Quiz for Class X",
-                                "Deadline",
-                                "10 Days left",
-                                true,
-                                true,
-                              ),
-                              calendarEvent(
-                                "28th",
-                                "March",
-                                "",
-                                "Decide Class X Farewell Food Menu",
-                                "Deadline",
-                                "7 Days left",
-                                true,
-                                true,
-                              ),
-                            ],
+                            children: allTasks,
                           ),
                         ),
                       )

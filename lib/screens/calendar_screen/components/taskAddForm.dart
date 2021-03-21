@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TaskAddForm extends StatefulWidget {
-  Function(List) callback;
+  Function(Map) callback;
   TaskAddForm(this.callback);
 
   @override
@@ -42,7 +42,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
         TextButton(
           child: Text("ADD"),
           onPressed: () {
-            widget.callback([enteredText, deadline.toString().split(" ")[0]]);
+            widget.callback({'task': enteredText, 'deadline': deadline.toString().split(" ")[0]});
             Navigator.of(context).pop();
           },
         )
