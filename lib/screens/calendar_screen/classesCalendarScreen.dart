@@ -3,7 +3,87 @@ import 'package:school_management/screens/calendar_screen/components/screenHeade
 import 'package:school_management/screens/calendar_screen/components/calendarEvent.dart';
 import 'package:school_management/screens/calendar_screen/components/calendarDay.dart';
 
-class ClassesCalendarScreen extends StatelessWidget {
+class ClassesCalendarScreen extends StatefulWidget {
+  @override
+  _ClassesCalendarScreenState createState() => _ClassesCalendarScreenState();
+}
+
+class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
+  Map<String, List> classes = {
+    "21": [
+      calendarEvent("08:00", "AM", "1h", "Geography - Class X",
+          "Natural Regions of the World", "Room 10D, 5th Floor"),
+
+      calendarEvent("09:30", "AM", "1h", "Maths - Class IV",
+          "Squares and Cubes", "Room 3D, 2nd Floor"),
+
+      calendarEvent("11:00", "AM", "1h", "Geography - Class X",
+          "Natural Regions of the World", "Room 10D, 5th Floor"),
+    ],
+    "22": [
+      calendarEvent(
+        "08:00",
+        "AM",
+        "1h",
+        "Geography - Class X",
+        "Natural Regions of the World",
+        "Room 10D, 5th Floor",
+      ),
+    ],
+    "23": [
+      calendarEvent(
+        "09:00",
+        "AM",
+        "1h mins",
+        "English Literature - Class IV",
+        "Figures of Speech",
+        "Room 3F, 1st Floor",
+      ),
+    ],
+    "24": [
+      calendarEvent(
+        "10:30",
+        "AM",
+        "1h 30 mins",
+        "Maths - Class III",
+        "Division",
+        "Room 2C, 1st Floor",
+      ),
+    ],
+    "25": [
+      calendarEvent(
+        "10:30",
+        "AM",
+        "1h 30 mins",
+        "Maths - Class III",
+        "Division",
+        "Room 2C, 1st Floor",
+      ),
+    ],
+    "26": [
+      calendarEvent(
+        "10:30",
+        "AM",
+        "1h 30 mins",
+        "Maths - Class III",
+        "Division",
+        "Room 2C, 1st Floor",
+      ),
+    ],
+    "27": [
+      calendarEvent(
+        "10:30",
+        "AM",
+        "1h 30 mins",
+        "Maths - Class III",
+        "Division",
+        "Room 2C, 1st Floor",
+      ),
+    ],
+  };
+
+  int selectedDate = 23;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,42 +115,48 @@ class ClassesCalendarScreen extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  calendarDay("S", 14, false),
-                                  calendarDay("M", 15, true),
-                                  calendarDay("T", 16, false),
-                                  calendarDay("W", 17, false),
-                                  calendarDay("T", 18, false),
-                                  calendarDay("F", 19, false),
-                                  calendarDay("S", 20, false),
+                                  calendarDay("S", 21, selectedDate == 21, () {
+                                    setState(() {
+                                      selectedDate = 21;
+                                    });
+                                  }),
+                                  calendarDay("M", 22, selectedDate == 22, () {
+                                    setState(() {
+                                      selectedDate = 22;
+                                    });
+                                  }),
+                                  calendarDay("T", 23, selectedDate == 23, () {
+                                    setState(() {
+                                      selectedDate = 23;
+                                    });
+                                  }),
+                                  calendarDay("W", 24, selectedDate == 24, () {
+                                    setState(() {
+                                      selectedDate = 24;
+                                    });
+                                  }),
+                                  calendarDay("T", 25, selectedDate == 25, () {
+                                    setState(() {
+                                      selectedDate = 25;
+                                    });
+                                  }),
+                                  calendarDay("F", 26, selectedDate == 26, () {
+                                    setState(() {
+                                      selectedDate = 26;
+                                    });
+                                  }),
+                                  calendarDay("S", 27, selectedDate == 27, () {
+                                    setState(() {
+                                      selectedDate = 27;
+                                    });
+                                  }),
                                 ],
                               ),
                             ),
-                            calendarEvent(
-                              "08:00",
-                              "AM",
-                              "1h",
-                              "Geography - Class X",
-                              "Natural Regions of the World",
-                              "Room 10D, 5th Floor",
-                            ),
-                            calendarEvent(
-                              "09:00",
-                              "AM",
-                              "1h mins",
-                              "English Literature - Class IV",
-                              "Figures of Speech",
-                              "Room 3F, 1st Floor",
-                            ),
-                            calendarEvent(
-                              "10:30",
-                              "AM",
-                              "1h 30 mins",
-                              "Maths - Class III",
-                              "Division",
-                              "Room 2C, 1st Floor",
-                            ),
+                            for (var i in classes[selectedDate.toString()]) i
                           ],
                         ),
                       ),

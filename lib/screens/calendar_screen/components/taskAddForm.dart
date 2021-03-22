@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class TaskAddForm extends StatefulWidget {
   Function(Map) callback;
+
   TaskAddForm(this.callback);
 
   @override
@@ -43,7 +44,11 @@ class _TaskAddFormState extends State<TaskAddForm> {
         TextButton(
           child: Text("ADD"),
           onPressed: () {
-            widget.callback({'task': taskName, 'description': taskDescription, 'deadline': deadline.toString().split(" ")[0]});
+            widget.callback({
+              'task': taskName,
+              'description': taskDescription,
+              'deadline': deadline.toString().split(" ")[0]
+            });
             Navigator.of(context).pop();
           },
         )
@@ -60,7 +65,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
               hintText: "Enter Task Name",
             ),
           ),
-
           TextField(
             onChanged: (newText) {
               taskDescription = newText;
@@ -71,7 +75,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
             ),
           ),
           TextButton(
-            child: Text("Pick Date"),
+            child: Text(
+              deadline == null ? "Select Deadline" : "Deadline: ${deadline.day}/${deadline.month}/${deadline.year}",
+            ),
             onPressed: callDatePicker,
           )
         ],
