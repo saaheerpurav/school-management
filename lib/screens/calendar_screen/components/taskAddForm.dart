@@ -10,7 +10,8 @@ class TaskAddForm extends StatefulWidget {
 
 class _TaskAddFormState extends State<TaskAddForm> {
   var deadline;
-  var enteredText;
+  var taskName;
+  var taskDescription;
 
   void callDatePicker() async {
     var order = await getDate();
@@ -42,7 +43,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
         TextButton(
           child: Text("ADD"),
           onPressed: () {
-            widget.callback({'task': enteredText, 'deadline': deadline.toString().split(" ")[0]});
+            widget.callback({'task': taskName, 'description': taskDescription, 'deadline': deadline.toString().split(" ")[0]});
             Navigator.of(context).pop();
           },
         )
@@ -52,11 +53,21 @@ class _TaskAddFormState extends State<TaskAddForm> {
         children: <Widget>[
           TextField(
             onChanged: (newText) {
-              enteredText = newText;
+              taskName = newText;
             },
             decoration: InputDecoration(
               labelText: "Task",
               hintText: "Enter Task Name",
+            ),
+          ),
+
+          TextField(
+            onChanged: (newText) {
+              taskDescription = newText;
+            },
+            decoration: InputDecoration(
+              labelText: "Description",
+              hintText: "Enter Task Description (Optional)",
             ),
           ),
           TextButton(

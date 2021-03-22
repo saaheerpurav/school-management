@@ -45,20 +45,34 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   ];
 
   callback(newData) {
+    int deadlineDate = getDate(DateTime.parse(newData['deadline']));
+    String deadlineMessage;
+
+    if(deadlineDate == 1){
+      deadlineMessage = "1 Day left";
+    }
+    else{
+      deadlineMessage = "$deadlineDate Days left";
+    }
+
     setState(() {
       allTasks.add(
         calendarEvent(
           "${newData['deadline']}st",
           "March",
           "",
-          "Create Geography Quiz for Class X",
-          "Deadline",
-          "10 Days left",
+          newData['task'],
+          newData['description'],
+          deadlineMessage,
           true,
-          true,
+          deadlineDate > 7,
         ),
       );
     });
+  }
+
+  int getDate(DateTime date) {
+    return (date.difference(DateTime.now()).inDays + 1);
   }
 
   @override

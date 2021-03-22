@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget calendarEvent(String timeNum, String timeType, String duration,
-    String title, String topic, String room,
+    String title, var topic, String room,
     [bool isTasks = false, bool completed = false]) {
   return Container(
     margin: EdgeInsets.only(top: 20, bottom: 10),
@@ -88,18 +88,25 @@ Widget calendarEvent(String timeNum, String timeType, String duration,
                 ),
               ),
               SizedBox(height: 7),
-              Text(
-                topic,
-                textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-              ),
-              SizedBox(height: 7),
+              topic == null
+                  ? Container(
+                      width: 0,
+                      height: 0,
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(bottom: 7),
+                      child: Text(
+                        topic,
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
               Row(
                 children: <Widget>[
                   isTasks
