@@ -11,14 +11,14 @@ class ClassesCalendarScreen extends StatefulWidget {
 class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
   Map<String, List> classes = {
     "21": [
-      calendarEvent("08:00", "AM", "1h", "Geography - Class X",
-          "Natural Regions of the World", "Room 10D, 5th Floor"),
-
-      calendarEvent("09:30", "AM", "1h", "Maths - Class IV",
-          "Squares and Cubes", "Room 3D, 2nd Floor"),
-
-      calendarEvent("11:00", "AM", "1h", "Geography - Class X",
-          "Natural Regions of the World", "Room 10D, 5th Floor"),
+      calendarEvent(
+        "09:00",
+        "AM",
+        "1h mins",
+        "English Literature - Class IV",
+        "Figures of Speech",
+        "Room 3F, 1st Floor",
+      ),
     ],
     "22": [
       calendarEvent(
@@ -31,14 +31,16 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
       ),
     ],
     "23": [
-      calendarEvent(
-        "09:00",
-        "AM",
-        "1h mins",
-        "English Literature - Class IV",
-        "Figures of Speech",
-        "Room 3F, 1st Floor",
-      ),
+      calendarEvent("08:00", "AM", "1h", "Geography - Class X",
+          "Natural Regions of the World", "Room 10D, 5th Floor"),
+      calendarEvent("09:30", "AM", "1h", "Maths - Class IV",
+          "Squares and Cubes", "Room 3D, 2nd Floor"),
+      calendarEvent("11:00", "AM", "1h", "Geography - Class X",
+          "Natural Regions of the World", "Room 10D, 5th Floor"),
+      calendarEvent("12:00", "AM", "1h", "Dance - Class VIII",
+          "Salsa", "Hall, 2nd Floor"),
+      calendarEvent("1:00", "PM", "1h", "Craft - Class III",
+          "Creating Pen Stand", "Room 2C, 2nd Floor"),
     ],
     "24": [
       calendarEvent(

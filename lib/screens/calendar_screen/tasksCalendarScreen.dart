@@ -42,6 +42,26 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
       true,
       true,
     ),
+    calendarEvent(
+      "3rd",
+      "April",
+      "",
+      "Create Presentaion",
+      "Presentaion for Class X on Natural Regions",
+      "11 Days left",
+      true,
+      true,
+    ),
+    calendarEvent(
+      "28th",
+      "March",
+      "",
+      "Create Video",
+      "Class X Memories Video for Annual Concert",
+      "5 Days left",
+      true,
+      false,
+    ),
   ];
 
   callback(newData) {
@@ -80,7 +100,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.edit),
+        child: Icon(Icons.add),
         onPressed: () {
           showDialog(
             context: context,

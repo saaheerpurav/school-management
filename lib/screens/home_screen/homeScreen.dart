@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                             children: <Widget>[
                               Spacer(),
                               Text(
-                                "Sat ",
+                                "Tue ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                     decoration: TextDecoration.none,
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                                     color: Color(0XFF263064)),
                               ),
                               Text(
-                                "21 Mar",
+                                "23 Mar",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
