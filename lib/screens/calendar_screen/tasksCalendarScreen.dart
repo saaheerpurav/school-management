@@ -10,86 +10,7 @@ class TasksCalendarScreen extends StatefulWidget {
 
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   var data;
-
-  List<Widget> allTasks = [
-    calendarEvent(
-      "24th",
-      "March",
-      "",
-      "Create Time Table for Class I",
-      "Deadline",
-      "3 Days left",
-      true,
-      false,
-    ),
-    calendarEvent(
-      "31st",
-      "March",
-      "",
-      "Create Geography Quiz for Class X",
-      "Deadline",
-      "10 Days left",
-      true,
-      true,
-    ),
-    calendarEvent(
-      "28th",
-      "March",
-      "",
-      "Decide Class X Farewell Food Menu",
-      "Deadline",
-      "7 Days left",
-      true,
-      true,
-    ),
-    calendarEvent(
-      "3rd",
-      "April",
-      "",
-      "Create Presentaion",
-      "Presentaion for Class X on Natural Regions",
-      "11 Days left",
-      true,
-      true,
-    ),
-    calendarEvent(
-      "28th",
-      "March",
-      "",
-      "Create Video",
-      "Class X Memories Video for Annual Concert",
-      "5 Days left",
-      true,
-      false,
-    ),
-  ];
-
-  callback(newData) {
-    int deadlineDate = getDate(DateTime.parse(newData['deadline']));
-    String deadlineMessage;
-
-    if(deadlineDate == 1){
-      deadlineMessage = "1 Day left";
-    }
-    else{
-      deadlineMessage = "$deadlineDate Days left";
-    }
-
-    setState(() {
-      allTasks.add(
-        calendarEvent(
-          "${newData['deadline']}st",
-          "March",
-          "",
-          newData['task'],
-          newData['description'],
-          deadlineMessage,
-          true,
-          deadlineDate > 7,
-        ),
-      );
-    });
-  }
+  List<Widget> allTasks = [];
 
   int getDate(DateTime date) {
     return (date.difference(DateTime.now()).inDays + 1);
@@ -97,6 +18,105 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    callback(newData) {
+      int deadlineDate = getDate(DateTime.parse(newData['deadline']));
+      String deadlineMessage;
+
+      if (deadlineDate == 1) {
+        deadlineMessage = "1 Day left";
+      } else {
+        deadlineMessage = "$deadlineDate Days left";
+      }
+
+      print(newData['isEdit']);
+
+      setState(() {
+        allTasks.add(
+          calendarEvent(
+            "${newData['deadline'].split("-").last}st",
+            "March",
+            "",
+            newData['task'],
+            newData['description'],
+            deadlineMessage,
+            TaskAddForm(callback, newData),
+            newData['status'],
+            true,
+            deadlineDate > 7,
+            context,
+          ),
+        );
+      });
+    }
+
+   /* allTasks = [
+      calendarEvent(
+        "24th",
+        "March",
+        "",
+        "Create Time Table for Class I",
+        "Deadline",
+        "3 Days left",
+        TaskAddForm(callback),
+        "Incomplete",
+        true,
+        false,
+        context,
+      ),
+      calendarEvent(
+        "31st",
+        "March",
+        "",
+        "Create Geography Quiz for Class X",
+        "Deadline",
+        "10 Days left",
+        TaskAddForm(callback),
+        "Incomplete",
+        true,
+        true,
+        context,
+      ),
+      calendarEvent(
+        "28th",
+        "March",
+        "",
+        "Decide Class X Farewell Food Menu",
+        "Deadline",
+        "7 Days left",
+        TaskAddForm(callback),
+        "Complete",
+        true,
+        true,
+        context,
+      ),
+      calendarEvent(
+        "3rd",
+        "April",
+        "",
+        "Create Presentaion",
+        "Presentaion for Class X on Natural Regions",
+        "11 Days left",
+        TaskAddForm(callback),
+        "Complete",
+        true,
+        true,
+        context,
+      ),
+      calendarEvent(
+        "28th",
+        "March",
+        "",
+        "Create Video",
+        "Class X Memories Video for Annual Concert",
+        "5 Days left",
+        TaskAddForm(callback),
+        "Incomplete",
+        true,
+        false,
+        context,
+      ),
+    ];*/
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
@@ -125,7 +145,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                       screenHeader(true, context),
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.only(top: 20, bottom: 70),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(

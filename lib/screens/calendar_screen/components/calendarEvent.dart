@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
-Widget calendarEvent(String timeNum, String timeType, String duration,
-    String title, var topic, String room,
-    [bool isTasks = false, bool completed = false]) {
+Widget calendarEvent(
+  String timeNum,
+  String timeType,
+  String duration,
+  String title,
+  var topic,
+  String room, [
+  Widget alertDialog,
+  String status = "",
+  bool isTasks = false,
+  bool completed = false,
+  BuildContext context,
+]) {
   return Container(
     margin: EdgeInsets.only(top: 20, bottom: 10),
     child: Column(
@@ -107,6 +117,21 @@ Widget calendarEvent(String timeNum, String timeType, String duration,
                         ),
                       ),
                     ),
+              status == null
+                  ? Container(
+                      width: 0,
+                      height: 0,
+                    )
+                  : Text(
+                      "Status: $status",
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize: 13,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                      ),
+                    ),
               Row(
                 children: <Widget>[
                   isTasks
@@ -142,14 +167,21 @@ Widget calendarEvent(String timeNum, String timeType, String duration,
                   ),
                   Spacer(),
                   isTasks
-                  ? TextButton(
-                    child: Text("EDIT"),
-                    onPressed: (){},
-                  )
-                  : Container(
-                    width: 0,
-                    height: 0,
-                  )
+                      ? TextButton(
+                          child: Text("EDIT"),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alertDialog;
+                              },
+                            );
+                          },
+                        )
+                      : Container(
+                          width: 0,
+                          height: 0,
+                        )
                 ],
               ),
             ],

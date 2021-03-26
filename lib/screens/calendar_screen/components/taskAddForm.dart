@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class TaskAddForm extends StatefulWidget {
   Function(Map) callback;
+  Map existingData;
 
-  TaskAddForm(this.callback);
+  TaskAddForm(this.callback, [this.existingData]);
 
   @override
   _TaskAddFormState createState() => _TaskAddFormState();
@@ -13,6 +14,8 @@ class _TaskAddFormState extends State<TaskAddForm> {
   var deadline;
   var taskName;
   var taskDescription;
+  var status = 'Incomplete';
+
 
   void callDatePicker() async {
     var order = await getDate();
@@ -34,6 +37,15 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.existingData != null){
+      var data = widget.existingData;
+
+      deadline = DateTime.parse(data['deadline']);
+      taskName = data['task'];
+      taskDescription = data['description'];
+      status = data['status'];
+    }
+
     return AlertDialog(
       title: Text("Add Task"),
       actions: <Widget>[
@@ -47,7 +59,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
             widget.callback({
               'task': taskName,
               'description': taskDescription,
-              'deadline': deadline.toString().split(" ")[0]
+              'deadline': deadline.toString().split(" ")[0],
+              'status': status,
+              'isEdit': widget.existingData != null,
             });
             Navigator.of(context).pop();
           },
@@ -56,7 +70,8 @@ class _TaskAddFormState extends State<TaskAddForm> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TextField(
+          TextFormField(
+            initialValue: taskName,
             onChanged: (newText) {
               taskName = newText;
             },
@@ -65,7 +80,8 @@ class _TaskAddFormState extends State<TaskAddForm> {
               hintText: "Enter Task Name",
             ),
           ),
-          TextField(
+          TextFormField(
+            initialValue: taskDescription,
             onChanged: (newText) {
               taskDescription = newText;
             },
@@ -74,12 +90,35 @@ class _TaskAddFormState extends State<TaskAddForm> {
               hintText: "Enter Task Description (Optional)",
             ),
           ),
+          SizedBox(height: 20),
           TextButton(
             child: Text(
-              deadline == null ? "Select Deadline" : "Deadline: ${deadline.day}/${deadline.month}/${deadline.year}",
+              deadline == null
+                  ? "Select Deadline"
+                  : "Deadline: ${deadline.day}/${deadline.month}/${deadline.year}",
             ),
             onPressed: callDatePicker,
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Status:  "),
+              DropdownButton<String>(
+                value: status,
+                items: <String>['Incomplete', 'Complete'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (text) {
+                  setState(() {
+                    status = text;
+                  });
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );
