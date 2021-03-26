@@ -139,6 +139,16 @@ Widget calendarEvent(String timeNum, String timeType, String duration,
                         color: Colors.blueGrey,
                       ),
                     ),
+                  ),
+                  Spacer(),
+                  isTasks
+                  ? TextButton(
+                    child: Text("EDIT"),
+                    onPressed: (){},
+                  )
+                  : Container(
+                    width: 0,
+                    height: 0,
                   )
                 ],
               ),

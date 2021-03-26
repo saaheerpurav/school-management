@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget sectionHeader(String title, int num, BuildContext context, Widget screen) {
+Widget sectionHeader(
+    String title, int num, BuildContext context, String route) {
   return Row(
     children: <Widget>[
       Text(
@@ -30,9 +31,9 @@ Widget sectionHeader(String title, int num, BuildContext context, Widget screen)
         height: 30,
         child: TextButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(builder: (context) => screen),
+              route,
             );
           },
           child: Text(

@@ -127,7 +127,7 @@ class HomeScreen extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             sectionHeader("TODAY'S CLASSES", 5, context,
-                                ClassesCalendarScreen()),
+                                '/main/classes'),
                             classContainer(
                               "Geography - Class X",
                               false,
@@ -141,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                               "Room 3F, 1st Floor",
                             ),
                             sectionHeader("YOUR TASKS", 3, context,
-                                TasksCalendarScreen()),
+                                '/main/tasks'),
                             SizedBox(height: 10),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,

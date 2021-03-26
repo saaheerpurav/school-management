@@ -11,25 +11,6 @@ Widget columnsBuilder(List list, [bool labels = false]) {
     "Adhaar Card Number"
   ];
 
-  /*return Column(
-    children: list
-        .map(
-          (item) => Container(
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Text(
-              item.toString(),
-            ),
-          ),
-        )
-        .toList(),
-  );*/
-
   var listMap = list.asMap();
   var newListMap = {};
 
@@ -49,13 +30,22 @@ Widget columnsBuilder(List list, [bool labels = false]) {
         Container(
           width: double.infinity,
           margin: EdgeInsets.only(top: 5, bottom: labels ? 20 : 5, left: 20, right: 20),
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Text(
-            value.toString(),
+          child: TextField(
+            controller: TextEditingController()..text = value.toString(),
+            onChanged: (text){
+            },
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+            ),
           ),
         ),
       ],

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
 
+import 'package:school_management/drawer.dart';
+
 import 'package:school_management/screens/home_screen/homeScreen.dart';
 import 'package:school_management/screens/login_screen/loginScreen.dart';
 import 'package:school_management/screens/profile_screen/profileScreen.dart';
 import 'package:school_management/screens/signup_screen/signupScreen.dart';
 import 'package:school_management/screens/login_signup_select_screen/loginSignupSelectScreen.dart';
+
+import 'package:school_management/screens/calendar_screen/classesCalendarScreen.dart';
+import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.dart';
 
 void main() {
   runApp(
@@ -17,6 +22,8 @@ void main() {
         '/login': (_) => LoginScreen(),
         '/signup': (_) => SignupScreen(),
         '/main': (_) => BottomNavigator(),
+        '/main/classes': (_) => ClassesCalendarScreen(),
+        '/main/tasks': (_) => TasksCalendarScreen(),
       },
     ),
   );
@@ -58,7 +65,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     }
 
     return Scaffold(
-      //body: child,
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
@@ -71,6 +77,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           ],
         ),
       ),
+      drawer: drawer(context),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (newIndex) => setState(() {
           _index = newIndex;
