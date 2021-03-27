@@ -11,6 +11,7 @@ Widget calendarEvent(
   String status = "",
   bool isTasks = false,
   bool completed = false,
+  Color taskColor,
   BuildContext context,
 ]) {
   return Container(
@@ -74,9 +75,10 @@ Widget calendarEvent(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: isTasks
-                ? completed
+                /*? completed
                     ? Colors.green.withOpacity(0.2)
-                    : Colors.pink.withOpacity(0.2)
+                    : Colors.pink.withOpacity(0.2)*/
+                ? taskColor.withOpacity(0.2)
                 : Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -113,7 +115,7 @@ Widget calendarEvent(
                           fontSize: 13,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
-                          color: Colors.grey,
+                          color: Colors.blueGrey,
                         ),
                       ),
                     ),
@@ -129,7 +131,7 @@ Widget calendarEvent(
                         fontSize: 13,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey,
+                        color: Colors.blueGrey,
                       ),
                     ),
               Row(
@@ -141,7 +143,7 @@ Widget calendarEvent(
                           margin: EdgeInsets.only(right: 5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: completed ? Colors.green : Colors.red,
+                            color: taskColor,
                           ),
                         )
                       : Icon(

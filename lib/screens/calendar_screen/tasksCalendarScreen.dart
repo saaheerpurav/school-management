@@ -11,6 +11,15 @@ class TasksCalendarScreen extends StatefulWidget {
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   var data;
   List<Map> allTasks = [];
+  List<Color> colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+    Colors.pink,
+    Colors.purple,
+    Colors.orange,
+    Colors.teal,
+  ];
 
   int getDate(DateTime date) {
     return (date.difference(DateTime.now()).inDays + 1);
@@ -27,28 +36,91 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
       } else {
         deadlineMessage = "$deadlineDate Days left";
       }
+      var date = newData['deadline'].split("-").last.toString();
+      var month = newData['deadline'].split("-")[1];
+      var dateInt = int.parse(date);
+      var monthInt = int.parse(month);
+
+      if (dateInt < 10) {
+        date = date[1];
+      }
+
+      var lastNum = int.parse(date[date.length - 1]);
+
+      if (lastNum == 1 && (dateInt < 10 || dateInt > 20)) {
+        date = "${date}st $month";
+      } else if (lastNum == 2 && (dateInt < 10 || dateInt > 20)) {
+        date = "${date}nd";
+      } else if (lastNum == 3 && (dateInt < 10 || dateInt > 20)) {
+        date = "${date}rd";
+      } else {
+        date = "${date}th";
+      }
+
+      switch (monthInt) {
+        case 1:
+          month = "January";
+          break;
+        case 2:
+          month = "February";
+          break;
+        case 3:
+          month = "March";
+          break;
+        case 4:
+          month = "April";
+          break;
+        case 5:
+          month = "May";
+          break;
+        case 6:
+          month = "June";
+          break;
+        case 7:
+          month = "July";
+          break;
+        case 8:
+          month = "August";
+          break;
+        case 9:
+          month = "September";
+          break;
+        case 10:
+          month = "October";
+          break;
+        case 11:
+          month = "November";
+          break;
+        case 12:
+          month = "December";
+          break;
+      }
 
       setState(() {
         if (newData['isEdit'] == true) {
-          var task_to_edit = allTasks[allTasks.indexOf(allTasks.firstWhere((e)=>e['id'] == newData['id']))];
-          task_to_edit['deadline'] = "${newData['deadline'].split("-").last}st";
-          task_to_edit['task'] = newData['task'];
-          task_to_edit['description'] = newData['description'];
-          task_to_edit['status'] = newData['status'];
-          task_to_edit['deadlineMessage'] = deadlineMessage;
-          task_to_edit['formWidget'] = TaskAddForm(callback, newData);
-          task_to_edit['isComplete'] = deadlineDate > 7;
-          task_to_edit['context'] = context;
+          var taskToEdit = allTasks[allTasks
+              .indexOf(allTasks.firstWhere((e) => e['id'] == newData['id']))];
+          taskToEdit['deadline'] = date;
+          taskToEdit['month'] = month;
+          taskToEdit['task'] = newData['task'];
+          taskToEdit['description'] = newData['description'];
+          taskToEdit['status'] = newData['status'];
+          taskToEdit['deadlineMessage'] = deadlineMessage;
+          taskToEdit['formWidget'] = TaskAddForm(callback, newData);
+          taskToEdit['isComplete'] = deadlineDate > 7;
+          taskToEdit['context'] = context;
         } else {
           allTasks.add(
             {
-              "deadline": "${newData['deadline'].split("-").last}st",
+              "deadline": date,
+              "month": month,
               "task": newData['task'],
               "description": newData['description'],
               "deadlineMessage": deadlineMessage,
               "formWidget": TaskAddForm(callback, newData),
               "status": newData['status'],
               "isComplete": deadlineDate > 7,
+              "color": (colors.toList()..shuffle()).first,
               "context": context,
               'id': newData['id'],
             },
@@ -163,19 +235,22 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                           ),
                           child: Column(
                             children: allTasks
-                                .map((e) => calendarEvent(
-                                      e['deadline'],
-                                      "March",
-                                      "",
-                                      e['task'],
-                                      e['description'],
-                                      e['deadlineMessage'],
-                                      e['formWidget'],
-                                      e['status'],
-                                      true,
-                                      e['isComplete'],
-                                      e['context'],
-                                    ))
+                                .map(
+                                  (e) => calendarEvent(
+                                    e['deadline'],
+                                    e['month'],
+                                    "",
+                                    e['task'],
+                                    e['description'],
+                                    e['deadlineMessage'],
+                                    e['formWidget'],
+                                    e['status'],
+                                    true,
+                                    e['isComplete'],
+                                    e['color'],
+                                    e['context'],
+                                  ),
+                                )
                                 .toList(),
                           ),
                         ),
