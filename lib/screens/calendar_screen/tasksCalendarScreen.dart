@@ -10,7 +10,7 @@ class TasksCalendarScreen extends StatefulWidget {
 
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   var data;
-  List<Widget> allTasks = [];
+  List<Map> allTasks = [];
 
   int getDate(DateTime date) {
     return (date.difference(DateTime.now()).inDays + 1);
@@ -28,28 +28,36 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
         deadlineMessage = "$deadlineDate Days left";
       }
 
-      print(newData['isEdit']);
-
       setState(() {
-        allTasks.add(
-          calendarEvent(
-            "${newData['deadline'].split("-").last}st",
-            "March",
-            "",
-            newData['task'],
-            newData['description'],
-            deadlineMessage,
-            TaskAddForm(callback, newData),
-            newData['status'],
-            true,
-            deadlineDate > 7,
-            context,
-          ),
-        );
+        if (newData['isEdit'] == true) {
+          var task_to_edit = allTasks[allTasks.indexOf(allTasks.firstWhere((e)=>e['id'] == newData['id']))];
+          task_to_edit['deadline'] = "${newData['deadline'].split("-").last}st";
+          task_to_edit['task'] = newData['task'];
+          task_to_edit['description'] = newData['description'];
+          task_to_edit['status'] = newData['status'];
+          task_to_edit['deadlineMessage'] = deadlineMessage;
+          task_to_edit['formWidget'] = TaskAddForm(callback, newData);
+          task_to_edit['isComplete'] = deadlineDate > 7;
+          task_to_edit['context'] = context;
+        } else {
+          allTasks.add(
+            {
+              "deadline": "${newData['deadline'].split("-").last}st",
+              "task": newData['task'],
+              "description": newData['description'],
+              "deadlineMessage": deadlineMessage,
+              "formWidget": TaskAddForm(callback, newData),
+              "status": newData['status'],
+              "isComplete": deadlineDate > 7,
+              "context": context,
+              'id': newData['id'],
+            },
+          );
+        }
       });
     }
 
-   /* allTasks = [
+    /* allTasks = [
       calendarEvent(
         "24th",
         "March",
@@ -154,7 +162,21 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                             ),
                           ),
                           child: Column(
-                            children: allTasks,
+                            children: allTasks
+                                .map((e) => calendarEvent(
+                                      e['deadline'],
+                                      "March",
+                                      "",
+                                      e['task'],
+                                      e['description'],
+                                      e['deadlineMessage'],
+                                      e['formWidget'],
+                                      e['status'],
+                                      true,
+                                      e['isComplete'],
+                                      e['context'],
+                                    ))
+                                .toList(),
                           ),
                         ),
                       )

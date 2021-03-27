@@ -36,16 +36,22 @@ class _TaskAddFormState extends State<TaskAddForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if(widget.existingData != null){
       var data = widget.existingData;
 
-      deadline = DateTime.parse(data['deadline']);
-      taskName = data['task'];
-      taskDescription = data['description'];
-      status = data['status'];
+      setState(() {
+        deadline = DateTime.parse(data['deadline']);
+        taskName = data['task'];
+        taskDescription = data['description'];
+        status = data['status'];
+      });
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Add Task"),
       actions: <Widget>[
@@ -56,13 +62,27 @@ class _TaskAddFormState extends State<TaskAddForm> {
         TextButton(
           child: Text("ADD"),
           onPressed: () {
-            widget.callback({
-              'task': taskName,
-              'description': taskDescription,
-              'deadline': deadline.toString().split(" ")[0],
-              'status': status,
-              'isEdit': widget.existingData != null,
-            });
+            var isEdit = widget.existingData != null;
+            if(isEdit){
+              widget.callback({
+                'task': taskName,
+                'description': taskDescription,
+                'deadline': deadline.toString().split(" ")[0],
+                'status': status,
+                'isEdit': true,
+                'id': widget.existingData['id'],
+              });
+            }
+            else{
+              widget.callback({
+                'task': taskName,
+                'description': taskDescription,
+                'deadline': deadline.toString().split(" ")[0],
+                'status': status,
+                'isEdit': false,
+                'id': DateTime.now().millisecondsSinceEpoch,
+              });
+            }
             Navigator.of(context).pop();
           },
         )
@@ -73,7 +93,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
           TextFormField(
             initialValue: taskName,
             onChanged: (newText) {
-              taskName = newText;
+              setState(() {
+                taskName = newText;
+              });
             },
             decoration: InputDecoration(
               labelText: "Task",
@@ -83,7 +105,9 @@ class _TaskAddFormState extends State<TaskAddForm> {
           TextFormField(
             initialValue: taskDescription,
             onChanged: (newText) {
-              taskDescription = newText;
+              setState(() {
+                taskDescription = newText;
+              });
             },
             decoration: InputDecoration(
               labelText: "Description",
