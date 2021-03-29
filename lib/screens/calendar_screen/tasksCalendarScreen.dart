@@ -26,77 +26,147 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    callback(newData) {
-      int deadlineDate = getDate(DateTime.parse(newData['deadline']));
-      String deadlineMessage;
+  void initState() {
+    allTasks = [
+      {
+        'task': "Create Time Table",
+        'description': "Create Class Time Table for Class I",
+        'deadline': '29th',
+        'month': 'March',
+        'deadlineMessage': '1 Day left',
+        'status': 'Incomplete',
+        'isEdit': false,
+        'id': '1617037296509',
+        'color': (colors.toList()..shuffle()).first,
+        'formWidget': TaskAddForm(callback),
+        'context': context,
+      },
+      {
+        'task': "Create Quiz",
+        'description': "Create Geography Quiz for Class X",
+        'deadline': '8th',
+        'month': 'April',
+        'deadlineMessage': '10 Days left',
+        'status': 'Incomplete',
+        'isEdit': false,
+        'id': '161703729675679',
+        'color': (colors.toList()..shuffle()).first,
+        'formWidget': TaskAddForm(callback),
+        'context': context,
+      },
+      {
+        'task': "Decide Class X Farewell Food Menu",
+        'deadline': '10th',
+        'month': 'May',
+        'deadlineMessage': '30 Days left',
+        'status': 'Incomplete',
+        'isEdit': false,
+        'id': '16056790234423',
+        'color': (colors.toList()..shuffle()).first,
+        'formWidget': TaskAddForm(callback),
+        'context': context,
+      },
+      {
+        'task': "Create Presentaion",
+        'description': "Presentaion for Class X on Natural Regions",
+        'deadline': '4th',
+        'month': 'April',
+        'deadlineMessage': '11 Days left',
+        'status': 'Incomplete',
+        'isEdit': false,
+        'id': '16066954347',
+        'color': (colors.toList()..shuffle()).first,
+        'formWidget': TaskAddForm(callback),
+        'context': context,
+      },
+      {
+        'task': "Create Video",
+        'description': "Class X Memories Video for Annual Concert",
+        'deadline': '3rd',
+        'month': 'April',
+        'deadlineMessage': '5 Days left',
+        'status': 'Incomplete',
+        'isEdit': false,
+        'id': '16087758665759',
+        'color': (colors.toList()..shuffle()).first,
+        'formWidget': TaskAddForm(callback),
+        'context': context,
+      },
+    ];
+  }
 
-      if (deadlineDate == 1) {
-        deadlineMessage = "1 Day left";
-      } else {
-        deadlineMessage = "$deadlineDate Days left";
-      }
-      var date = newData['deadline'].split("-").last.toString();
-      var month = newData['deadline'].split("-")[1];
-      var dateInt = int.parse(date);
-      var monthInt = int.parse(month);
+  callback(newData) {
+    int deadlineDate = getDate(DateTime.parse(newData['deadline']));
+    String deadlineMessage;
 
-      if (dateInt < 10) {
-        date = date[1];
-      }
+    if (deadlineDate == 1) {
+      deadlineMessage = "1 Day left";
+    } else {
+      deadlineMessage = "$deadlineDate Days left";
+    }
+    var date = newData['deadline'].split("-").last.toString();
+    var month = newData['deadline'].split("-")[1];
+    var dateInt = int.parse(date);
+    var monthInt = int.parse(month);
 
-      var lastNum = int.parse(date[date.length - 1]);
+    if (dateInt < 10) {
+      date = date[1];
+    }
 
-      if (lastNum == 1 && (dateInt < 10 || dateInt > 20)) {
-        date = "${date}st $month";
-      } else if (lastNum == 2 && (dateInt < 10 || dateInt > 20)) {
-        date = "${date}nd";
-      } else if (lastNum == 3 && (dateInt < 10 || dateInt > 20)) {
-        date = "${date}rd";
-      } else {
-        date = "${date}th";
-      }
+    var lastNum = int.parse(date[date.length - 1]);
 
-      switch (monthInt) {
-        case 1:
-          month = "January";
-          break;
-        case 2:
-          month = "February";
-          break;
-        case 3:
-          month = "March";
-          break;
-        case 4:
-          month = "April";
-          break;
-        case 5:
-          month = "May";
-          break;
-        case 6:
-          month = "June";
-          break;
-        case 7:
-          month = "July";
-          break;
-        case 8:
-          month = "August";
-          break;
-        case 9:
-          month = "September";
-          break;
-        case 10:
-          month = "October";
-          break;
-        case 11:
-          month = "November";
-          break;
-        case 12:
-          month = "December";
-          break;
-      }
+    if (lastNum == 1 && (dateInt < 10 || dateInt > 20)) {
+      date = "${date}st $month";
+    } else if (lastNum == 2 && (dateInt < 10 || dateInt > 20)) {
+      date = "${date}nd";
+    } else if (lastNum == 3 && (dateInt < 10 || dateInt > 20)) {
+      date = "${date}rd";
+    } else {
+      date = "${date}th";
+    }
 
-      setState(() {
+    switch (monthInt) {
+      case 1:
+        month = "January";
+        break;
+      case 2:
+        month = "February";
+        break;
+      case 3:
+        month = "March";
+        break;
+      case 4:
+        month = "April";
+        break;
+      case 5:
+        month = "May";
+        break;
+      case 6:
+        month = "June";
+        break;
+      case 7:
+        month = "July";
+        break;
+      case 8:
+        month = "August";
+        break;
+      case 9:
+        month = "September";
+        break;
+      case 10:
+        month = "October";
+        break;
+      case 11:
+        month = "November";
+        break;
+      case 12:
+        month = "December";
+        break;
+    }
+
+    setState(
+      () {
+        print(newData);
         if (newData['isEdit'] == true) {
           var taskToEdit = allTasks[allTasks
               .indexOf(allTasks.firstWhere((e) => e['id'] == newData['id']))];
@@ -107,7 +177,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
           taskToEdit['status'] = newData['status'];
           taskToEdit['deadlineMessage'] = deadlineMessage;
           taskToEdit['formWidget'] = TaskAddForm(callback, newData);
-          taskToEdit['isComplete'] = deadlineDate > 7;
           taskToEdit['context'] = context;
         } else {
           allTasks.add(
@@ -119,84 +188,18 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
               "deadlineMessage": deadlineMessage,
               "formWidget": TaskAddForm(callback, newData),
               "status": newData['status'],
-              "isComplete": deadlineDate > 7,
               "color": (colors.toList()..shuffle()).first,
               "context": context,
               'id': newData['id'],
             },
           );
         }
-      });
-    }
+      },
+    );
+  }
 
-    /* allTasks = [
-      calendarEvent(
-        "24th",
-        "March",
-        "",
-        "Create Time Table for Class I",
-        "Deadline",
-        "3 Days left",
-        TaskAddForm(callback),
-        "Incomplete",
-        true,
-        false,
-        context,
-      ),
-      calendarEvent(
-        "31st",
-        "March",
-        "",
-        "Create Geography Quiz for Class X",
-        "Deadline",
-        "10 Days left",
-        TaskAddForm(callback),
-        "Incomplete",
-        true,
-        true,
-        context,
-      ),
-      calendarEvent(
-        "28th",
-        "March",
-        "",
-        "Decide Class X Farewell Food Menu",
-        "Deadline",
-        "7 Days left",
-        TaskAddForm(callback),
-        "Complete",
-        true,
-        true,
-        context,
-      ),
-      calendarEvent(
-        "3rd",
-        "April",
-        "",
-        "Create Presentaion",
-        "Presentaion for Class X on Natural Regions",
-        "11 Days left",
-        TaskAddForm(callback),
-        "Complete",
-        true,
-        true,
-        context,
-      ),
-      calendarEvent(
-        "28th",
-        "March",
-        "",
-        "Create Video",
-        "Class X Memories Video for Annual Concert",
-        "5 Days left",
-        TaskAddForm(callback),
-        "Incomplete",
-        true,
-        false,
-        context,
-      ),
-    ];*/
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
@@ -246,7 +249,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                                     e['formWidget'],
                                     e['status'],
                                     true,
-                                    e['isComplete'],
                                     e['color'],
                                     e['context'],
                                   ),

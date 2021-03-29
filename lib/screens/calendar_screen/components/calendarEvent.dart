@@ -10,7 +10,6 @@ Widget calendarEvent(
   Widget alertDialog,
   String status = "",
   bool isTasks = false,
-  bool completed = false,
   Color taskColor,
   BuildContext context,
 ]) {
@@ -75,9 +74,6 @@ Widget calendarEvent(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: isTasks
-                /*? completed
-                    ? Colors.green.withOpacity(0.2)
-                    : Colors.pink.withOpacity(0.2)*/
                 ? taskColor.withOpacity(0.2)
                 : Colors.white,
             borderRadius: BorderRadius.circular(20),
