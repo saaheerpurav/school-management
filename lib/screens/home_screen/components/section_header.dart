@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget sectionHeader(
-    String title, int num, BuildContext context, String route) {
+Widget sectionHeader(String title, BuildContext context, [String route]) {
   return Row(
     children: <Widget>[
       Text(
@@ -15,17 +14,6 @@ Widget sectionHeader(
           color: Color(0XFF263064),
         ),
       ),
-      Text(
-        " ($num)",
-        textDirection: TextDirection.ltr,
-        style: TextStyle(
-          decoration: TextDecoration.none,
-          fontSize: 12,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w400,
-          color: Colors.grey,
-        ),
-      ),
       Spacer(),
       SizedBox(
         height: 30,
@@ -36,19 +24,24 @@ Widget sectionHeader(
               route,
             );
           },
-          child: Text(
-            "See All",
-            textDirection: TextDirection.ltr,
-            style: TextStyle(
-              decoration: TextDecoration.none,
-              fontSize: 13,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              color: Color(
-                0XFF263064,
-              ),
-            ),
-          ),
+          child: route != null
+              ? Text(
+                  "See All",
+                  textDirection: TextDirection.ltr,
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontSize: 13,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                    color: Color(
+                      0XFF263064,
+                    ),
+                  ),
+                )
+              : Container(
+                  width: 0,
+                  height: 0,
+                ),
         ),
       )
     ],

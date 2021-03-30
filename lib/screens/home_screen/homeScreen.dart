@@ -141,7 +141,10 @@ class HomeScreen extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             sectionHeader(
-                                "TODAY'S CLASSES", 5, context, '/main/classes'),
+                              "TODAY'S CLASSES",
+                              context,
+                              '/main/classes',
+                            ),
                             classContainer(
                               "Geography - Class X",
                               false,
@@ -155,7 +158,10 @@ class HomeScreen extends StatelessWidget {
                               "Room 3F, 1st Floor",
                             ),
                             sectionHeader(
-                                "YOUR TASKS", 3, context, '/main/tasks'),
+                              "YOUR TASKS",
+                              context,
+                              '/main/tasks',
+                            ),
                             SizedBox(height: 10),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -166,7 +172,33 @@ class HomeScreen extends StatelessWidget {
                                     )
                                     .toList(),
                               ),
-                            )
+                            ),
+                            SizedBox(height: 20),
+                            sectionHeader(
+                              "YOUR ACHIEVEMENTS",
+                              context,
+                            ),
+                            Row(
+                              children: [
+                                Card(
+                                  elevation: 18.0,
+                                  shape: CircleBorder(),
+                                  child: Image.asset(
+                                    'images/badges/best_teacher.png',
+                                    height: 80,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Card(
+                                  elevation: 18.0,
+                                  shape: CircleBorder(),
+                                  child: Image.asset(
+                                    'images/badges/star_teacher.png',
+                                    height: 80,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
