@@ -77,9 +77,9 @@ class _TabBarViewState extends State<CustomTabBarView>
               indicatorWeight: 3,
               controller: _tabController,
               tabs: [
+                customTabHeader("INFORMATION"),
                 customTabHeader("SKILLS"),
                 customTabHeader("INTERESTS"),
-                customTabHeader("INFORMATION"),
               ],
             ),
           ),
@@ -98,9 +98,9 @@ class _TabBarViewState extends State<CustomTabBarView>
               child: TabBarView(
                 controller: _tabController,
                 children: <Widget>[
+                  columnsBuilder(information, true),
                   columnsBuilder(skills),
                   columnsBuilder(interests),
-                  columnsBuilder(information, true),
                 ],
               ),
             ),

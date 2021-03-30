@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
 
 class ProfileScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +19,16 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 10),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.menu,
+                            color: Color(0XFF263064),
+                          ),
+                        ),
+                      ),
                       Center(
                         child: Stack(
                           children: [

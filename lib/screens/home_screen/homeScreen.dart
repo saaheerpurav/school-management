@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date = new DateTime.now().toString();
+    var date = DateTime.now().toString();
     var dateParse = DateTime.parse(date);
     var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
     debugPrint(formattedDate);
@@ -29,12 +29,20 @@ class HomeScreen extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(height: 10),
                     Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: EdgeInsets.only(right: 20),
                       margin: EdgeInsets.only(bottom: 10),
                       child: Column(
                         children: <Widget>[
                           Row(
                             children: <Widget>[
+                              IconButton(
+                                onPressed: () =>
+                                    Scaffold.of(context).openDrawer(),
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: Color(0XFF263064),
+                                ),
+                              ),
                               Spacer(),
                               Text(
                                 "Tue ",
@@ -65,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                margin: EdgeInsets.only(right: 20),
+                                margin: EdgeInsets.symmetric(horizontal: 20),
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
