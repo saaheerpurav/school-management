@@ -73,9 +73,7 @@ Widget calendarEvent(
           margin: EdgeInsets.only(left: 30, right: 10),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-            color: isTasks
-                ? taskColor.withOpacity(0.2)
-                : Colors.white,
+            color: isTasks ? taskColor.withOpacity(0.2) : Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isTasks ? Colors.white : Color(0xFFeeeeee),
@@ -84,16 +82,31 @@ Widget calendarEvent(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                title,
-                textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  fontSize: 15,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  color: Color(0XFF263064),
-                ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      title,
+                      textDirection: TextDirection.ltr,
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize: 15,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        color: Color(0XFF263064),
+                      ),
+                    ),
+                  ),
+                  status == "Complete"
+                      ? Icon(
+                          Icons.done,
+                          color: taskColor,
+                        )
+                      : Container(
+                          width: 0,
+                          height: 0,
+                        ),
+                ],
               ),
               SizedBox(height: 7),
               topic == null

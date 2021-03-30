@@ -27,7 +27,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
   Future<DateTime> getDate() {
     return showDatePicker(
       context: context,
-      initialDate: deadline,
+      initialDate: widget.existingData == null ? DateTime.now() : deadline,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
         Duration(days: 100),

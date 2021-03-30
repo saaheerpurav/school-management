@@ -1,31 +1,51 @@
 import 'package:flutter/material.dart';
 
-Widget taskContainer(String title, int daysLeft, bool completed) {
+Widget taskContainer(Map data) {
   return Container(
     margin: EdgeInsets.only(right: 10),
     padding: EdgeInsets.all(10),
     width: 150,
     height: 150,
     decoration: BoxDecoration(
-      color: completed
-          ? Colors.green.withOpacity(0.2)
-          : Colors.pink.withOpacity(0.2),
+      color: data['color'].withOpacity(0.2),
       borderRadius: BorderRadius.circular(20),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "Deadline",
+          data['task'],
           textDirection: TextDirection.ltr,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             decoration: TextDecoration.none,
-            fontSize: 10,
+            fontSize: 15,
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
-            color: Colors.blueGrey,
+            fontWeight: FontWeight.w700,
+            color: Color(0XFF263064),
           ),
         ),
+        SizedBox(height: 5),
+        data['description'] != null
+            ? Text(
+                data['description'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontSize: 13,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blueGrey,
+                ),
+              )
+            : Container(
+                width: 0,
+                height: 0,
+              ),
+        SizedBox(height: 5),
         Row(
           children: <Widget>[
             Container(
@@ -34,11 +54,11 @@ Widget taskContainer(String title, int daysLeft, bool completed) {
               margin: EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: completed ? Colors.green : Colors.red,
+                color: data['color'],
               ),
             ),
             Text(
-              "$daysLeft Days Left",
+              data['deadlineMessage'],
               textDirection: TextDirection.ltr,
               style: TextStyle(
                 decoration: TextDecoration.none,
@@ -50,18 +70,6 @@ Widget taskContainer(String title, int daysLeft, bool completed) {
             ),
           ],
         ),
-        SizedBox(height: 5),
-        Text(
-          title,
-          textDirection: TextDirection.ltr,
-          style: TextStyle(
-            decoration: TextDecoration.none,
-            fontSize: 15,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            color: Color(0XFF263064),
-          ),
-        )
       ],
     ),
   );

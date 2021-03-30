@@ -3,10 +3,12 @@ import 'components/section_header.dart';
 import 'components/task_container.dart';
 import 'components/class_container.dart';
 
-import 'package:school_management/screens/calendar_screen/classesCalendarScreen.dart';
-import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.dart';
+import 'package:school_management/data/tasks.dart';
+import 'package:school_management/data/colors.dart';
 
 class HomeScreen extends StatelessWidget {
+  List<Map> allTasks = tasks(colors);
+
   @override
   Widget build(BuildContext context) {
     var date = new DateTime.now().toString();
@@ -38,11 +40,12 @@ class HomeScreen extends StatelessWidget {
                                 "Tue ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontSize: 15.0,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0XFF263064)),
+                                  decoration: TextDecoration.none,
+                                  fontSize: 15.0,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0XFF263064),
+                                ),
                               ),
                               Text(
                                 "23 Mar",
@@ -69,14 +72,17 @@ class HomeScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.blueGrey.withOpacity(0.2),
-                                        blurRadius: 12,
-                                        spreadRadius: 8)
+                                      color: Colors.blueGrey.withOpacity(0.2),
+                                      blurRadius: 12,
+                                      spreadRadius: 8,
+                                    )
                                   ],
                                   image: DecorationImage(
-                                      image: NetworkImage(
-                                          'https://i.pravatar.cc/150?img=26'),
-                                      fit: BoxFit.cover),
+                                    image: NetworkImage(
+                                      'https://i.pravatar.cc/150?img=26',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               Column(
@@ -126,8 +132,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                         child: Column(
                           children: <Widget>[
-                            sectionHeader("TODAY'S CLASSES", 5, context,
-                                '/main/classes'),
+                            sectionHeader(
+                                "TODAY'S CLASSES", 5, context, '/main/classes'),
                             classContainer(
                               "Geography - Class X",
                               false,
@@ -140,29 +146,17 @@ class HomeScreen extends StatelessWidget {
                               "09:00",
                               "Room 3F, 1st Floor",
                             ),
-                            sectionHeader("YOUR TASKS", 3, context,
-                                '/main/tasks'),
+                            sectionHeader(
+                                "YOUR TASKS", 3, context, '/main/tasks'),
                             SizedBox(height: 10),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: <Widget>[
-                                  taskContainer(
-                                    "Create Time Table for Class I",
-                                    3,
-                                    false,
-                                  ),
-                                  taskContainer(
-                                    "Create Geography Quiz for Class X",
-                                    10,
-                                    true,
-                                  ),
-                                  taskContainer(
-                                    "Decide Class X Farewell Food Menu",
-                                    7,
-                                    true,
-                                  ),
-                                ],
+                                children: allTasks
+                                    .map(
+                                      (e) => taskContainer(e),
+                                    )
+                                    .toList(),
                               ),
                             )
                           ],

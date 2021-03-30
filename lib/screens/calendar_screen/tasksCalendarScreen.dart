@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_management/screens/calendar_screen/components/screenHeader.dart';
 import 'package:school_management/screens/calendar_screen/components/calendarEvent.dart';
 import 'package:school_management/screens/calendar_screen/components/taskAddForm.dart';
+import 'package:school_management/data/tasks.dart';
+import 'package:school_management/data/colors.dart';
 
 class TasksCalendarScreen extends StatefulWidget {
   @override
@@ -11,15 +13,7 @@ class TasksCalendarScreen extends StatefulWidget {
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   var data;
   List<Map> allTasks = [];
-  List<Color> colors = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.orange,
-    Colors.teal,
-  ];
+  List<Map> newTaskList = [];
 
   int getDate(DateTime date) {
     return (date.difference(DateTime.now()).inDays + 1);
@@ -27,72 +21,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
   @override
   void initState() {
-    allTasks = [
-      {
-        'task': "Create Time Table",
-        'description': "Create Class Time Table for Class I",
-        'deadline': '29th',
-        'month': 'March',
-        'deadlineMessage': '1 Day left',
-        'status': 'Incomplete',
-        'isEdit': false,
-        'id': '1617037296509',
-        'color': (colors.toList()..shuffle()).first,
-        'formWidget': TaskAddForm(callback),
-        'context': context,
-      },
-      {
-        'task': "Create Quiz",
-        'description': "Create Geography Quiz for Class X",
-        'deadline': '8th',
-        'month': 'April',
-        'deadlineMessage': '10 Days left',
-        'status': 'Incomplete',
-        'isEdit': false,
-        'id': '161703729675679',
-        'color': (colors.toList()..shuffle()).first,
-        'formWidget': TaskAddForm(callback),
-        'context': context,
-      },
-      {
-        'task': "Decide Class X Farewell Food Menu",
-        'deadline': '10th',
-        'month': 'May',
-        'deadlineMessage': '30 Days left',
-        'status': 'Incomplete',
-        'isEdit': false,
-        'id': '16056790234423',
-        'color': (colors.toList()..shuffle()).first,
-        'formWidget': TaskAddForm(callback),
-        'context': context,
-      },
-      {
-        'task': "Create Presentaion",
-        'description': "Presentaion for Class X on Natural Regions",
-        'deadline': '4th',
-        'month': 'April',
-        'deadlineMessage': '11 Days left',
-        'status': 'Incomplete',
-        'isEdit': false,
-        'id': '16066954347',
-        'color': (colors.toList()..shuffle()).first,
-        'formWidget': TaskAddForm(callback),
-        'context': context,
-      },
-      {
-        'task': "Create Video",
-        'description': "Class X Memories Video for Annual Concert",
-        'deadline': '3rd',
-        'month': 'April',
-        'deadlineMessage': '5 Days left',
-        'status': 'Incomplete',
-        'isEdit': false,
-        'id': '16087758665759',
-        'color': (colors.toList()..shuffle()).first,
-        'formWidget': TaskAddForm(callback),
-        'context': context,
-      },
-    ];
+    allTasks = tasks(colors, context, callback);
   }
 
   callback(newData) {
@@ -166,7 +95,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
     setState(
       () {
-        print(newData);
         if (newData['isEdit'] == true) {
           var taskToEdit = allTasks[allTasks
               .indexOf(allTasks.firstWhere((e) => e['id'] == newData['id']))];
@@ -200,6 +128,20 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    allTasks.sort((a, b) => (a['id']).compareTo(b['id']));
+    newTaskList = [];
+
+    for (var i in allTasks) {
+      if (i['status'] == "Incomplete") {
+        newTaskList.add(i);
+      }
+    }
+    for (var i in allTasks) {
+      if (i['status'] == "Complete") {
+        newTaskList.add(i);
+      }
+    }
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
@@ -237,7 +179,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                             ),
                           ),
                           child: Column(
-                            children: allTasks
+                            children: newTaskList
                                 .map(
                                   (e) => calendarEvent(
                                     e['deadline'],
