@@ -10,31 +10,52 @@ class CustomTabBarView extends StatefulWidget {
 class _TabBarViewState extends State<CustomTabBarView>
     with TickerProviderStateMixin {
   TabController _tabController;
-  List skills = [
-    "Geography",
-    "English",
-    "Maths - Basics",
-  ];
+  List skills;
+  List interests;
+  List information;
 
-  List interests = [
-    "Craft",
-    "Dance",
-  ];
+  int indexToPass = -1;
 
-  List information = [
-    "Jessie Reeves",
-    "1st January, 1990",
-    "31",
-    "A+",
-    "987654321",
-    "user@email.com",
-    "1234 5678 9765"
-  ];
+  callback(String value, String type, int index) {
+    if (index != -1) {
+      indexToPass = index;
+    }
+    setState(() {
+      if (type == "information") {
+        information[indexToPass] = value;
+      } else if (type == "skills") {
+        skills[indexToPass] = value;
+      } else if (type == "interests") {
+        interests[indexToPass] = value;
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: 3);
+
+    skills = [
+      "Geography",
+      "English",
+      "Maths - Basics",
+    ];
+
+    interests = [
+      "Craft",
+      "Dance",
+    ];
+
+    information = [
+      "Jessie Reeves",
+      "1st January, 1990",
+      "31",
+      "A+",
+      "987654321",
+      "user@email.com",
+      "1234 5678 9765"
+    ];
   }
 
   @override
@@ -83,26 +104,53 @@ class _TabBarViewState extends State<CustomTabBarView>
               ],
             ),
           ),
-          
-
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFebebeb),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFebebeb),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  height: MediaQuery.of(context).size.height / 2 - 35,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: <Widget>[
+                      ColumnBuilder(callback, information, "information", true),
+                      ColumnBuilder(callback, skills, "skills"),
+                      ColumnBuilder(callback, interests, "interests"),
+                    ],
+                  ),
                 ),
-              ),
-              height: MediaQuery.of(context).size.height / 2,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  columnsBuilder(information, true),
-                  columnsBuilder(skills),
-                  columnsBuilder(interests),
-                ],
-              ),
+                Positioned(
+                  bottom: -4,
+                  left: 0,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                    color: Color(0xFFebebeb),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: TextButton(
+                      onPressed: () {
+                        print(interests);
+                      },
+                      child: Text(
+                        "Update",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.orange),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

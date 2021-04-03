@@ -98,6 +98,13 @@ Widget drawer(BuildContext context) {
             Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
           },
         ),
+        ListTile(
+          title: Text('About Us'),
+          leading: Icon(Icons.info_outline),
+          onTap: () {
+            Navigator.pushNamed(context, '/about');
+          },
+        ),
       ],
     ),
   );

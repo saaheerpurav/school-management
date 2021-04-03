@@ -6,6 +6,8 @@ import 'package:school_management/drawer.dart';
 import 'package:school_management/screens/home_screen/homeScreen.dart';
 import 'package:school_management/screens/login_screen/loginScreen.dart';
 import 'package:school_management/screens/profile_screen/profileScreen.dart';
+import 'package:school_management/screens/about_screen/aboutScreen.dart';
+
 import 'package:school_management/screens/signup_screen/signupScreen.dart';
 import 'package:school_management/screens/login_signup_select_screen/loginSignupSelectScreen.dart';
 
@@ -21,6 +23,7 @@ void main() {
         '/': (_) => LoginSignupSelectScreen(),
         '/login': (_) => LoginScreen(),
         '/signup': (_) => SignupScreen(),
+        '/about': (_) => AboutScreen(),
         '/main': (_) => BottomNavigator(),
         '/main/classes': (_) => ClassesCalendarScreen(),
         '/main/tasks': (_) => TasksCalendarScreen(),
