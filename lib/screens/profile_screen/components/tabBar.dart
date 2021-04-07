@@ -134,7 +134,21 @@ class _TabBarViewState extends State<CustomTabBarView>
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: TextButton(
                       onPressed: () {
-                        print(interests);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Success"),
+                              content: Text("Profile Updated Successfully!"),
+                              actions: [
+                                TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: Text(
                         "Update",

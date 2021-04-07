@@ -52,17 +52,18 @@ class _TaskAddFormState extends State<TaskAddForm> {
 
   @override
   Widget build(BuildContext context) {
+    var isEdit = widget.existingData != null;
+
     return AlertDialog(
-      title: Text("Add Task"),
+      title: Text(isEdit ? "Edit Task" : "Add Task"),
       actions: <Widget>[
         TextButton(
           child: Text("CANCEL"),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text("ADD"),
+          child: Text(isEdit ? "EDIT" : "ADD"),
           onPressed: () {
-            var isEdit = widget.existingData != null;
             if(isEdit){
               widget.callback({
                 'task': taskName,
