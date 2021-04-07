@@ -6,6 +6,7 @@ Widget roundedInput(String placeholder, IconData icon){
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: TextField(
         keyboardType: TextInputType.emailAddress,
+        obscureText: icon == Icons.lock,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 30),
           fillColor: Color(0xFFF1E6FF),

@@ -35,7 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           ListView(
             children: <Widget>[
-              SizedBox(height: 20),
+              SizedBox(height: 100),
               Center(
                 child: Text(
                   "SIGNUP",
@@ -49,9 +49,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 50),
               Image.asset('images/signup.png', height: 200),
-              SizedBox(height: 30),
+              SizedBox(height: 100),
               roundedInput("Email", Icons.person_rounded),
               SizedBox(height: 15),
               roundedInput("Password", Icons.lock),

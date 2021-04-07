@@ -29,7 +29,7 @@ class LoginSignupSelectScreen extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 100),
               Image.asset('images/logo.png'),
-              SizedBox(height: 100),
+              SizedBox(height: MediaQuery.of(context).size.height/4),
               roundedButton("LOGIN", context, "/login", Color(0xFF6F35A5)),
               SizedBox(height: 15),
               roundedButton("SIGNUP", context, "/signup", Color(0xFFF1E6FF), Color(0XFF263064)),

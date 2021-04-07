@@ -115,7 +115,7 @@ class _TabBarViewState extends State<CustomTabBarView>
                       topRight: Radius.circular(15),
                     ),
                   ),
-                  height: MediaQuery.of(context).size.height / 2 - 35,
+                  height: MediaQuery.of(context).size.height / 2 + 8,
                   child: TabBarView(
                     controller: _tabController,
                     children: <Widget>[
@@ -126,7 +126,7 @@ class _TabBarViewState extends State<CustomTabBarView>
                   ),
                 ),
                 Positioned(
-                  bottom: -4,
+                  bottom: 0,
                   left: 0,
                   width: MediaQuery.of(context).size.width,
                   child: Container(

@@ -182,6 +182,7 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Card(
                                   elevation: 18.0,
+                                  color: Colors.transparent,
                                   shape: CircleBorder(),
                                   child: Image.asset(
                                     'images/badges/best_teacher.png',
@@ -191,6 +192,7 @@ class HomeScreen extends StatelessWidget {
                                 SizedBox(width: 15),
                                 Card(
                                   elevation: 18.0,
+                                  color: Colors.transparent,
                                   shape: CircleBorder(),
                                   child: Image.asset(
                                     'images/badges/star_teacher.png',
