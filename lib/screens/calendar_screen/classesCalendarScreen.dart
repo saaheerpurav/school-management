@@ -10,7 +10,7 @@ class ClassesCalendarScreen extends StatefulWidget {
 
 class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
   Map<String, List> classes = {
-    "21": [
+    "4": [
       calendarEvent(
         "09:00",
         "AM",
@@ -20,7 +20,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 3F, 1st Floor",
       ),
     ],
-    "22": [
+    "5": [
       calendarEvent(
         "08:00",
         "AM",
@@ -30,19 +30,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 10D, 5th Floor",
       ),
     ],
-    "23": [
-      calendarEvent("08:00", "AM", "1h", "Geography - Class X",
-          "Natural Regions of the World", "Room 10D, 5th Floor"),
-      calendarEvent("09:30", "AM", "1h", "Maths - Class IV",
-          "Squares and Cubes", "Room 3D, 2nd Floor"),
-      calendarEvent("11:00", "AM", "1h", "Geography - Class X",
-          "Natural Regions of the World", "Room 10D, 5th Floor"),
-      calendarEvent("12:00", "AM", "1h", "Dance - Class VIII",
-          "Salsa", "Hall, 2nd Floor"),
-      calendarEvent("1:00", "PM", "1h", "Craft - Class III",
-          "Creating Pen Stand", "Room 2C, 2nd Floor"),
-    ],
-    "24": [
+    "6": [
       calendarEvent(
         "10:30",
         "AM",
@@ -52,7 +40,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 2C, 1st Floor",
       ),
     ],
-    "25": [
+    "7": [
       calendarEvent(
         "10:30",
         "AM",
@@ -62,7 +50,49 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 2C, 1st Floor",
       ),
     ],
-    "26": [
+    "8": [
+      calendarEvent(
+        "08:00",
+        "AM",
+        "1h",
+        "Geography - Class X",
+        "Natural Regions of the World",
+        "Room 10D, 5th Floor",
+      ),
+      calendarEvent(
+        "09:30",
+        "AM",
+        "1h",
+        "Maths - Class IV",
+        "Squares and Cubes",
+        "Room 3D, 2nd Floor",
+      ),
+      calendarEvent(
+        "11:00",
+        "AM",
+        "1h",
+        "Geography - Class X",
+        "Natural Regions of the World",
+        "Room 10D, 5th Floor",
+      ),
+      calendarEvent(
+        "12:00",
+        "AM",
+        "1h",
+        "Dance - Class VIII",
+        "Salsa",
+        "Hall, 2nd Floor",
+      ),
+      calendarEvent(
+        "1:00",
+        "PM",
+        "1h",
+        "Craft - Class III",
+        "Creating Pen Stand",
+        "Room 2C, 2nd Floor",
+      ),
+    ],
+    "9": [
       calendarEvent(
         "10:30",
         "AM",
@@ -72,7 +102,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 2C, 1st Floor",
       ),
     ],
-    "27": [
+    "10": [
       calendarEvent(
         "10:30",
         "AM",
@@ -84,7 +114,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
     ],
   };
 
-  int selectedDate = 23;
+  int selectedDate = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -120,39 +150,39 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  calendarDay("S", 21, selectedDate == 21, () {
+                                  calendarDay("S", 4, selectedDate == 4, () {
                                     setState(() {
-                                      selectedDate = 21;
+                                      selectedDate = 4;
                                     });
                                   }),
-                                  calendarDay("M", 22, selectedDate == 22, () {
+                                  calendarDay("M", 5, selectedDate == 5, () {
                                     setState(() {
-                                      selectedDate = 22;
+                                      selectedDate = 5;
                                     });
                                   }),
-                                  calendarDay("T", 23, selectedDate == 23, () {
+                                  calendarDay("T", 6, selectedDate == 6, () {
                                     setState(() {
-                                      selectedDate = 23;
+                                      selectedDate = 6;
                                     });
                                   }),
-                                  calendarDay("W", 24, selectedDate == 24, () {
+                                  calendarDay("W", 7, selectedDate == 7, () {
                                     setState(() {
-                                      selectedDate = 24;
+                                      selectedDate = 7;
                                     });
                                   }),
-                                  calendarDay("T", 25, selectedDate == 25, () {
+                                  calendarDay("T", 8, selectedDate == 8, () {
                                     setState(() {
-                                      selectedDate = 25;
+                                      selectedDate = 8;
                                     });
                                   }),
-                                  calendarDay("F", 26, selectedDate == 26, () {
+                                  calendarDay("F", 9, selectedDate == 9, () {
                                     setState(() {
-                                      selectedDate = 26;
+                                      selectedDate = 9;
                                     });
                                   }),
-                                  calendarDay("S", 27, selectedDate == 27, () {
+                                  calendarDay("S", 10, selectedDate == 10, () {
                                     setState(() {
-                                      selectedDate = 27;
+                                      selectedDate = 10;
                                     });
                                   }),
                                 ],

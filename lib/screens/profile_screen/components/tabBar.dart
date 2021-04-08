@@ -53,7 +53,7 @@ class _TabBarViewState extends State<CustomTabBarView>
       "31",
       "A+",
       "987654321",
-      "user@email.com",
+      "testuser@gmail.com",
       "1234 5678 9765"
     ];
   }

@@ -50,7 +50,7 @@ Widget drawer(BuildContext context) {
                 ),
                 Center(
                   child: Text(
-                    "user@email.com",
+                    "testuser@gmail.com",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: 14,

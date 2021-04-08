@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               Spacer(),
                               Text(
-                                "Tue ",
+                                "Thu ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "23 Mar",
+                                "8 Apr",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -152,10 +152,10 @@ class HomeScreen extends StatelessWidget {
                               "Room 10D, 5th Floor",
                             ),
                             classContainer(
-                              "English Literature - Class IV",
+                              "Maths - Class IV",
                               true,
-                              "09:00",
-                              "Room 3F, 1st Floor",
+                              "09:30",
+                              "Room 3d, 2nd Floor",
                             ),
                             sectionHeader(
                               "YOUR TASKS",
