@@ -1,42 +1,72 @@
 import 'package:flutter/material.dart';
 
-import 'components/section_header.dart';
-import 'components/task_container.dart';
-import 'components/class_container.dart';
+import 'package:school_management/screens/home_screen/components/section_header.dart';
+import 'package:school_management/screens/home_screen/components/task_container.dart';
+import 'package:school_management/screens/home_screen/components/class_container.dart';
+import 'package:school_management/screens/home_screen/components/empty_container.dart';
 
 import 'package:school_management/data/tasks.dart';
 import 'package:school_management/data/colors.dart';
+import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:school_management/functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends State<HomeScreen> {
+  List<Map> allClasses;
+  List<Map> allTasks;
+  List allAchievements;
+
+  /*List<Map> allClasses = [
+    {
+      "title": "Geography - Class X",
+      "time": "08:00",
+      "room": "Room 10D, 5th Floor",
+    },
+    {
+      "title": "Maths - Class IV",
+      "time": "09:30",
+      "room": "Room 3d, 2nd Floor",
+    },
+  ];
+
   List<Map> allTasks = tasks(colors);
+
+  List allAchievements = [
+    'images/badges/best_teacher.png',
+    'images/badges/star_teacher.png',
+  ];*/
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name;
   String email;
 
   @override
-  Widget build(BuildContext context) {
-    var date = DateTime.parse(DateTime.now().toString());
-    var formattedDate = "${date.day} ${getMonthName(date.month)}";
+  void initState() {
+    super.initState();
+    email = FirebaseAuth.instance.currentUser.email;
 
     users
-        .where('email', isEqualTo: 'saaheer.purav@gmail.com')
+        .where('email', isEqualTo: email)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         setState(() {
           name = doc['name'];
-          email = doc['email'];
         });
       });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var date = DateTime.parse(DateTime.now().toString());
+    var formattedDate = "${date.day} ${getMonthName(date.month)}";
 
     return Container(
       padding: EdgeInsets.only(top: 24),
@@ -67,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Spacer(),
                               Text(
-                                "${getDayName(date.weekday)}, ",
+                                "${getDayName(date.weekday)} ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -108,10 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   ],
                                   image: DecorationImage(
+                                    fit: BoxFit.cover,
                                     image: NetworkImage(
                                       'https://i.pravatar.cc/150?img=65',
                                     ),
-                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -119,15 +149,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "Hi ${name.split(" ")[0]}",
+                                    name == null
+                                        ? ""
+                                        : "Hi ${name.split(" ")[0]}",
                                     textDirection: TextDirection.ltr,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontSize: 25,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w700,
-                                        color: Color(0XFF263064)),
+                                      decoration: TextDecoration.none,
+                                      fontSize: 25,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0XFF263064),
+                                    ),
                                   ),
                                   Container(
                                     width: 200,
@@ -167,62 +200,55 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               '/main/classes',
                             ),
-                            classContainer(
-                              "Geography - Class X",
-                              false,
-                              "08:00",
-                              "Room 10D, 5th Floor",
-                            ),
-                            classContainer(
-                              "Maths - Class IV",
-                              true,
-                              "09:30",
-                              "Room 3d, 2nd Floor",
-                            ),
+                            allClasses == null
+                                ? emptyContainer("classes")
+                                : Column(
+                                    children: allClasses
+                                        .map(
+                                          (e) => classContainer(e),
+                                        )
+                                        .toList(),
+                                  ),
+                            SizedBox(height: 20),
                             sectionHeader(
                               "YOUR TASKS",
                               context,
                               '/main/tasks',
                             ),
-                            SizedBox(height: 10),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: allTasks
-                                    .map(
-                                      (e) => taskContainer(e),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
+                            allTasks == null
+                                ? emptyContainer("tasks")
+                                : SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: allTasks
+                                          .map(
+                                            (e) => taskContainer(e),
+                                          )
+                                          .toList(),
+                                    ),
+                                  ),
                             SizedBox(height: 20),
                             sectionHeader(
                               "YOUR ACHIEVEMENTS",
                               context,
                             ),
-                            Row(
-                              children: [
-                                Card(
-                                  elevation: 18.0,
-                                  color: Colors.transparent,
-                                  shape: CircleBorder(),
-                                  child: Image.asset(
-                                    'images/badges/best_teacher.png',
-                                    height: 80,
+                            allAchievements == null
+                                ? emptyContainer("achievements")
+                                : Row(
+                                    children: allAchievements
+                                        .map(
+                                          (e) => Card(
+                                            elevation: 18.0,
+                                            color: Colors.transparent,
+                                            shape: CircleBorder(),
+                                            child: Image.asset(
+                                              e,
+                                              height: 80,
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
                                   ),
-                                ),
-                                SizedBox(width: 15),
-                                Card(
-                                  elevation: 18.0,
-                                  color: Colors.transparent,
-                                  shape: CircleBorder(),
-                                  child: Image.asset(
-                                    'images/badges/star_teacher.png',
-                                    height: 80,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget classContainer(
-    String title, bool bottomPadding, String time, String room) {
+Widget classContainer(Map data) {
   return Container(
-    margin: EdgeInsets.only(top: 10, bottom: bottomPadding ? 20 : 0),
+    margin: EdgeInsets.only(top: 10),
     padding: EdgeInsets.symmetric(horizontal: 10),
     decoration: BoxDecoration(
       color: Color(0XFFefefef),
@@ -16,7 +15,7 @@ Widget classContainer(
           child: Column(
             children: <Widget>[
               Text(
-                time,
+                data['time'],
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   decoration: TextDecoration.none,
@@ -50,7 +49,7 @@ Widget classContainer(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                title,
+                data['title'],
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   decoration: TextDecoration.none,
@@ -72,7 +71,7 @@ Widget classContainer(
                     padding: EdgeInsets.only(left: 7),
                     width: 150,
                     child: Text(
-                      room,
+                      data['room'],
                       textDirection: TextDirection.ltr,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
