@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
 
-class ProfileScreen extends StatelessWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  String name = "";
+
+  @override
+  void initState() {
+    super.initState();
+    users
+        .where('email', isEqualTo: FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          name = doc['name'];
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(height: 20),
                       Center(
                         child: Text(
-                          "Jessie Reeves",
+                          name,
                           style: TextStyle(
                             decoration: TextDecoration.none,
                             fontSize: 20,
@@ -100,6 +125,40 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(height: 30),
                       Expanded(
                         child: CustomTabBarView(),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Color(0xFFebebeb),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        child: TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Success"),
+                                  content: Text("Profile Updated Successfully!"),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("OK"),
+                                      onPressed: () => Navigator.of(context).pop(),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Colors.orange),
+                          ),
+                        ),
                       ),
                     ],
                   ),

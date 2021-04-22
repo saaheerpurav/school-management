@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];*/
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  String name;
+  String name = "";
   String email;
 
   @override
@@ -149,9 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    name == null
-                                        ? ""
-                                        : "Hi ${name.split(" ")[0]}",
+                                    "Hi ${name.split(" ")[0]}",
                                     textDirection: TextDirection.ltr,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(

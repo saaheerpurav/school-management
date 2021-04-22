@@ -7,7 +7,6 @@ class ColumnBuilder extends StatefulWidget {
   String type;
   bool labels;
 
-  //ColumnBuilder(this.callback, List list, [bool labels = false]);
   ColumnBuilder(this.callback, this.list, this.type, [this.labels = false]);
 
   @override
@@ -28,20 +27,20 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
   var newListMap = {};
 
   @override
-  void initState(){
+  void initState() {
     widget.list.asMap().forEach((key, value) {
       newListMap[key] = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.labels
               ? Container(
-            margin: EdgeInsets.only(left: 20),
-            child: Text(informationLabels[key]),
-          )
+                  margin: EdgeInsets.only(left: 20),
+                  child: Text(informationLabels[key]),
+                )
               : Container(
-            width: 0,
-            height: 0,
-          ),
+                  width: 0,
+                  height: 0,
+                ),
           Container(
             width: double.infinity,
             margin: EdgeInsets.only(
