@@ -3,6 +3,11 @@ import 'package:school_management/screens/login_screen/components/rounded_input.
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
 import 'package:school_management/screens/signup_screen/components/icon_button.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:school_management/functions.dart';
+
 class SignupScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,8 +16,43 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  String email = "";
+  String password = "";
+
   @override
   Widget build(BuildContext context) {
+    Function signUp = () async {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+
+        users
+            .add({
+              'email': email,
+            })
+            .then(
+              showAlert(
+                context,
+                "Success",
+                "User added successfully!",
+                () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed('/main');
+                },
+              ),
+            )
+            .catchError((error) => print("Failed to add user: $error"));
+      } on FirebaseAuthException catch (e) {
+        showAlert(context, "Error", e.message, () {
+          Navigator.of(context).pop();
+        });
+      } catch (e) {
+        debugPrint(e);
+      }
+    };
+
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -52,11 +92,19 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 50),
               Image.asset('images/signup.png', height: 200),
               SizedBox(height: 100),
-              roundedInput("Email", Icons.person_rounded),
+              RoundedInput("Email", Icons.person_rounded, (value) {
+                setState(() {
+                  email = value;
+                });
+              }),
               SizedBox(height: 15),
-              roundedInput("Password", Icons.lock),
+              RoundedInput("Password", Icons.lock, (value) {
+                setState(() {
+                  password = value;
+                });
+              }),
               SizedBox(height: 15),
-              roundedButton("SIGNUP", context, "/main", Color(0xFF6F35A5)),
+              roundedButton("SIGNUP", context, signUp, Color(0xFF6F35A5)),
               SizedBox(height: 20),
               Center(
                 child: Text(

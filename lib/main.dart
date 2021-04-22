@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_icons/flutter_icons.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:school_management/drawer.dart';
 
@@ -14,7 +15,9 @@ import 'package:school_management/screens/login_signup_select_screen/loginSignup
 import 'package:school_management/screens/calendar_screen/classesCalendarScreen.dart';
 import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MaterialApp(
       title: 'School Management',

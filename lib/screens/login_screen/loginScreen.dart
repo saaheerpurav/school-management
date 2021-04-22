@@ -52,11 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 50),
               Image.asset('images/login.png', height: 180),
               SizedBox(height: MediaQuery.of(context).size.height/5),
-              roundedInput("Email", Icons.person_rounded),
+              RoundedInput("Email", Icons.person_rounded),
               SizedBox(height: 15),
-              roundedInput("Password", Icons.lock),
+              RoundedInput("Password", Icons.lock),
               SizedBox(height: 15),
-              roundedButton("LOGIN", context, "/main", Color(0xFF6F35A5)),
+              roundedButton("LOGIN", context, ()=>Navigator.of(context).pushNamed("/main"), Color(0xFF6F35A5)),
               SizedBox(height: 20),
               Center(
                 child: Text(
