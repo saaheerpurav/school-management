@@ -18,6 +18,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+  String name = "";
   String email = "";
   String password = "";
 
@@ -25,25 +26,27 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     Function signUp = () async {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-
-        users
-            .add({
-              'email': email,
-            })
-            .then(
-              showAlert(
-                context,
-                "Success",
-                "User added successfully!",
-                () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed('/main');
-                },
-              ),
-            )
-            .catchError((error) => print("Failed to add user: $error"));
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((_) {
+          users
+              .add({
+                'name': name,
+                'email': email,
+              })
+              .then(
+                showAlert(
+                  context,
+                  "Success",
+                  "User added successfully!",
+                  () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/main');
+                  },
+                ),
+              )
+              .catchError((error) => print("Failed to add user: $error"));
+        });
       } on FirebaseAuthException catch (e) {
         showAlert(context, "Error", e.message, () {
           Navigator.of(context).pop();
@@ -92,7 +95,13 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 50),
               Image.asset('images/signup.png', height: 200),
               SizedBox(height: 100),
-              RoundedInput("Email", Icons.person_rounded, (value) {
+              RoundedInput("Name", Icons.person_rounded, (value) {
+                setState(() {
+                  name = value;
+                });
+              }),
+              SizedBox(height: 15),
+              RoundedInput("Email", Icons.email, (value) {
                 setState(() {
                   email = value;
                 });

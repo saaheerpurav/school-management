@@ -18,7 +18,7 @@ class RoundedInputState extends State<RoundedInput> {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 30),
         child: TextField(
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: widget.icon == Icons.email ? TextInputType.emailAddress : TextInputType.text,
           obscureText: widget.icon == Icons.lock,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 30),

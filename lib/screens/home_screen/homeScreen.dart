@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'components/section_header.dart';
 import 'components/task_container.dart';
 import 'components/class_container.dart';
@@ -6,15 +7,36 @@ import 'components/class_container.dart';
 import 'package:school_management/data/tasks.dart';
 import 'package:school_management/data/colors.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:school_management/functions.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+class _HomeScreenState extends State<HomeScreen> {
   List<Map> allTasks = tasks(colors);
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  String name;
+  String email;
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.now().toString();
-    var dateParse = DateTime.parse(date);
-    var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
-    debugPrint(formattedDate);
+    var date = DateTime.parse(DateTime.now().toString());
+    var formattedDate = "${date.day} ${getMonthName(date.month)}";
+
+    users
+        .where('email', isEqualTo: 'saaheer.purav@gmail.com')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          name = doc['name'];
+          email = doc['email'];
+        });
+      });
+    });
 
     return Container(
       padding: EdgeInsets.only(top: 24),
@@ -45,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               Spacer(),
                               Text(
-                                "Thu ",
+                                "${getDayName(date.weekday)}, ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -56,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "8 Apr",
+                                formattedDate,
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -87,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                                   ],
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=26',
+                                      'https://i.pravatar.cc/150?img=65',
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -97,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "Hi Jessie",
+                                    "Hi ${name.split(" ")[0]}",
                                     textDirection: TextDirection.ltr,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
