@@ -64,6 +64,7 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
+                hintText: "Enter Text",
               ),
             ),
           ),

@@ -12,16 +12,29 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name = "";
+  User user = FirebaseAuth.instance.currentUser;
+  String docId;
+
+  List skills;
+  List interests;
+  List information;
+
+  callback(List list1, List list2, List list3){
+    skills = list1;
+    interests = list2;
+    information = list3;
+  }
 
   @override
   void initState() {
     super.initState();
     users
-        .where('email', isEqualTo: FirebaseAuth.instance.currentUser.email)
+        .where('email', isEqualTo: user.email)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         setState(() {
+          docId = doc.id;
           name = doc['name'];
         });
       });
@@ -124,24 +137,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 30),
                       Expanded(
-                        child: CustomTabBarView(),
+                        child: CustomTabBarView(callback),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         color: Color(0xFFebebeb),
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: TextButton(
                           onPressed: () {
+                            print(information);
+                            //TODO: Array getting jumbled and skills and interets - handle null
+                            users.doc(docId).update({
+                              'information': {
+                                "date_of_birth": information[1],
+                                "age": information[2],
+                                "blood_group": information[3],
+                                "contact": information[4],
+                                "adhaar_no": information[6],
+                              },
+                              'skills': skills,
+                              'interests': interests,
+                            });
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text("Success"),
-                                  content: Text("Profile Updated Successfully!"),
+                                  content:
+                                      Text("Profile Updated Successfully!"),
                                   actions: [
                                     TextButton(
                                       child: Text("OK"),
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                     ),
                                   ],
                                 );
@@ -156,7 +186,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.orange),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.orange),
                           ),
                         ),
                       ),
