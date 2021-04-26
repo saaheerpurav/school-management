@@ -146,8 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: TextButton(
                           onPressed: () {
-                            print(information);
-                            //TODO: Array getting jumbled and skills and interets - handle null
                             users.doc(docId).update({
                               'information': {
                                 "date_of_birth": information[1],

@@ -28,9 +28,7 @@ class _TabBarViewState extends State<CustomTabBarView>
 
   int indexToPass = -1;
 
-  callback(String value, String type, int index) {
-    widget.sendDataToParent(skills, interests, information);
-
+  changeLists(String value, String type, int index) {
     if (index != -1) {
       indexToPass = index;
     }
@@ -43,6 +41,20 @@ class _TabBarViewState extends State<CustomTabBarView>
         interests[indexToPass] = value;
       }
     });
+
+    widget.sendDataToParent(skills, interests, information);
+  }
+
+  addField(String type){
+    setState(() {
+      if (type == "skills") {
+        skills.add("");
+      } else if (type == "interests") {
+        interests.add("");
+      }
+    });
+
+    widget.sendDataToParent(skills, interests, information);
   }
 
   getData() {
@@ -79,8 +91,8 @@ class _TabBarViewState extends State<CustomTabBarView>
             ];
           }
 
-          skills = data['skills'];
-          interests = data['interests'];
+          skills = data['skills'] ?? [];
+          interests = data['interests'] ?? [];
 
           widget.sendDataToParent(skills, interests, information);
         });
@@ -169,9 +181,9 @@ class _TabBarViewState extends State<CustomTabBarView>
                   child: TabBarView(
                     controller: _tabController,
                     children: <Widget>[
-                      ColumnBuilder(callback, information, "information", true),
-                      ColumnBuilder(callback, skills, "skills"),
-                      ColumnBuilder(callback, interests, "interests"),
+                      ColumnBuilder(changeLists, addField, information, "information", true),
+                      ColumnBuilder(changeLists, addField, skills, "skills"),
+                      ColumnBuilder(changeLists, addField, interests, "interests"),
                     ],
                   ),
                 ),
