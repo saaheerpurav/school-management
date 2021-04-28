@@ -13,18 +13,33 @@ Widget taskContainer(Map data) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          data['task'],
-          textDirection: TextDirection.ltr,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            decoration: TextDecoration.none,
-            fontSize: 15,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            color: Color(0XFF263064),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                data['task'],
+                textDirection: TextDirection.ltr,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontSize: 15,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  color: Color(0XFF263064),
+                ),
+              ),
+            ),
+            data['status'] == "Complete"
+                ? Icon(
+                    Icons.done,
+                    color: data['color'],
+                  )
+                : Container(
+                    width: 0,
+                    height: 0,
+                  ),
+          ],
         ),
         SizedBox(height: 5),
         data['description'] != null

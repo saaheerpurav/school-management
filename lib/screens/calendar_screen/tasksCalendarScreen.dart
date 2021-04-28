@@ -8,6 +8,8 @@ import 'package:school_management/data/tasks.dart';
 import 'package:school_management/data/colors.dart';
 
 import 'package:school_management/functions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TasksCalendarScreen extends StatefulWidget {
   @override
@@ -15,9 +17,11 @@ class TasksCalendarScreen extends StatefulWidget {
 }
 
 class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
-  var data;
-  List<Map> allTasks = [];
+  List<Map> allTasks;
   List<Map> newTaskList = [];
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  String docId;
 
   int getDate(DateTime date) {
     return (date.difference(DateTime.now()).inDays + 1);
@@ -25,7 +29,39 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
   @override
   void initState() {
-    allTasks = tasks(colors, context, callback);
+    super.initState();
+
+    users
+        .where('email', isEqualTo: FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        var data = doc.data();
+        setState(() {
+          docId = doc.id;
+
+          allTasks = [];
+          if (data['tasks'] != null) {
+            for (var i in data['tasks']) {
+              allTasks.add(
+                {
+                  "deadline": i['deadline'],
+                  "month": i['month'],
+                  "task": i['task'],
+                  "description": i['description'],
+                  "deadlineMessage": i['deadlineMessage'],
+                  "formWidget": TaskAddForm(callback, i),
+                  "status": i['status'],
+                  "color": Color(int.parse(i['color'])),
+                  "context": context,
+                  'id': i['id'],
+                },
+              );
+            }
+          }
+        });
+      });
+    });
   }
 
   callback(newData) {
@@ -49,7 +85,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
     var lastNum = int.parse(date[date.length - 1]);
 
     if (lastNum == 1 && (dateInt < 10 || dateInt > 20)) {
-      date = "${date}st $month";
+      date = "${date}st";
     } else if (lastNum == 2 && (dateInt < 10 || dateInt > 20)) {
       date = "${date}nd";
     } else if (lastNum == 3 && (dateInt < 10 || dateInt > 20)) {
@@ -89,23 +125,45 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
             },
           );
         }
+
+        List tasksToSend = [];
+
+        for (var i in allTasks) {
+          var colourTemp = i['color'].toString().split("0xff")[1];
+          String colourString = "0xff" + colourTemp.substring(0, colourTemp.length - 1);
+
+          tasksToSend.add({
+            "deadline": i['deadline'],
+            "month": i['month'],
+            "task": i['task'],
+            "description": i['description'],
+            "deadlineMessage": i['deadlineMessage'],
+            "status": i['status'],
+            "color": colourString,
+            'id': i['id'],
+          });
+        }
+
+        users.doc(docId).update({'tasks': tasksToSend});
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    allTasks.sort((a, b) => (a['id']).compareTo(b['id']));
-    newTaskList = [];
+    if (allTasks != null) {
+      allTasks.sort((a, b) => (a['id']).compareTo(b['id']));
+      newTaskList = [];
 
-    for (var i in allTasks) {
-      if (i['status'] == "Incomplete") {
-        newTaskList.add(i);
+      for (var i in allTasks) {
+        if (i['status'] == "Incomplete") {
+          newTaskList.add(i);
+        }
       }
-    }
-    for (var i in allTasks) {
-      if (i['status'] == "Complete") {
-        newTaskList.add(i);
+      for (var i in allTasks) {
+        if (i['status'] == "Complete") {
+          newTaskList.add(i);
+        }
       }
     }
 
@@ -137,6 +195,8 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                       screenHeader(true, context),
                       Expanded(
                         child: Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
                           padding: EdgeInsets.only(top: 20, bottom: 70),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -145,25 +205,40 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                               topRight: Radius.circular(30),
                             ),
                           ),
-                          child: Column(
-                            children: newTaskList
-                                .map(
-                                  (e) => calendarEvent(
-                                    e['deadline'],
-                                    e['month'],
-                                    "",
-                                    e['task'],
-                                    e['description'],
-                                    e['deadlineMessage'],
-                                    e['formWidget'],
-                                    e['status'],
-                                    true,
-                                    e['color'],
-                                    e['context'],
-                                  ),
+                          child: allTasks == null
+                              ? Center(
+                                  child: CircularProgressIndicator(),
                                 )
-                                .toList(),
-                          ),
+                              : allTasks.isEmpty
+                                  ? Text(
+                                      "You have no tasks",
+                                      style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontSize: 20,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0XFF263064),
+                                      ),
+                                    )
+                                  : Column(
+                                      children: newTaskList
+                                          .map(
+                                            (e) => calendarEvent(
+                                              e['deadline'],
+                                              e['month'],
+                                              "",
+                                              e['task'],
+                                              e['description'],
+                                              e['deadlineMessage'],
+                                              e['formWidget'],
+                                              e['status'],
+                                              true,
+                                              e['color'],
+                                              e['context'],
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
                         ),
                       )
                     ],

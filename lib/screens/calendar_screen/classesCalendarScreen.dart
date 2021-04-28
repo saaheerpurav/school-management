@@ -9,7 +9,7 @@ class ClassesCalendarScreen extends StatefulWidget {
 }
 
 class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
-  Map<String, List> classes = {
+  /*Map<String, List> classes = {
     "4": [
       calendarEvent(
         "09:00",
@@ -112,7 +112,9 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
         "Room 2C, 1st Floor",
       ),
     ],
-  };
+  };*/
+
+  Map<String, List> classes;
 
   int selectedDate = 8;
 
@@ -134,6 +136,8 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
                     screenHeader(false, context),
                     Expanded(
                       child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
                         padding: EdgeInsets.only(top: 20),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -142,55 +146,76 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
                             topRight: Radius.circular(30),
                           ),
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                        child: classes == null
+                            ? Text(
+                                "You have no classes",
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontSize: 20,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0XFF263064),
+                                ),
+                              )
+                            : Column(
                                 children: <Widget>[
-                                  calendarDay("S", 4, selectedDate == 4, () {
-                                    setState(() {
-                                      selectedDate = 4;
-                                    });
-                                  }),
-                                  calendarDay("M", 5, selectedDate == 5, () {
-                                    setState(() {
-                                      selectedDate = 5;
-                                    });
-                                  }),
-                                  calendarDay("T", 6, selectedDate == 6, () {
-                                    setState(() {
-                                      selectedDate = 6;
-                                    });
-                                  }),
-                                  calendarDay("W", 7, selectedDate == 7, () {
-                                    setState(() {
-                                      selectedDate = 7;
-                                    });
-                                  }),
-                                  calendarDay("T", 8, selectedDate == 8, () {
-                                    setState(() {
-                                      selectedDate = 8;
-                                    });
-                                  }),
-                                  calendarDay("F", 9, selectedDate == 9, () {
-                                    setState(() {
-                                      selectedDate = 9;
-                                    });
-                                  }),
-                                  calendarDay("S", 10, selectedDate == 10, () {
-                                    setState(() {
-                                      selectedDate = 10;
-                                    });
-                                  }),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        calendarDay("S", 4, selectedDate == 4,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 4;
+                                          });
+                                        }),
+                                        calendarDay("M", 5, selectedDate == 5,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 5;
+                                          });
+                                        }),
+                                        calendarDay("T", 6, selectedDate == 6,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 6;
+                                          });
+                                        }),
+                                        calendarDay("W", 7, selectedDate == 7,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 7;
+                                          });
+                                        }),
+                                        calendarDay("T", 8, selectedDate == 8,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 8;
+                                          });
+                                        }),
+                                        calendarDay("F", 9, selectedDate == 9,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 9;
+                                          });
+                                        }),
+                                        calendarDay("S", 10, selectedDate == 10,
+                                            () {
+                                          setState(() {
+                                            selectedDate = 10;
+                                          });
+                                        }),
+                                      ],
+                                    ),
+                                  ),
+                                  for (var i
+                                      in classes[selectedDate.toString()])
+                                    i
                                 ],
                               ),
-                            ),
-                            for (var i in classes[selectedDate.toString()]) i
-                          ],
-                        ),
                       ),
                     ),
                   ],

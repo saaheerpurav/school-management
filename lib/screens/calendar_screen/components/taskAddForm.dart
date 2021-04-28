@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_management/functions.dart';
 
 class TaskAddForm extends StatefulWidget {
   Function(Map) callback;
@@ -25,24 +26,29 @@ class _TaskAddFormState extends State<TaskAddForm> {
   }
 
   Future<DateTime> getDate() {
-    return showDatePicker(
-      context: context,
-      initialDate: widget.existingData == null ? DateTime.now() : deadline,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        Duration(days: 100),
-      ),
-    );
+    try {
+      return showDatePicker(
+        context: context,
+        initialDate: widget.existingData == null ? DateTime.now() : deadline,
+        firstDate:  widget.existingData == null ? DateTime.now() : deadline,
+        lastDate: DateTime.now().add(
+          Duration(days: 100),
+        ),
+      );
+    }
+    on Exception catch(_){
+      debugPrint("No");
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    if(widget.existingData != null){
-      var data = widget.existingData;
-
+    var data = widget.existingData;
+    if(data != null){
+      //2021-04-28
       setState(() {
-        deadline = DateTime.parse(data['deadline']);
+        deadline = DateTime.parse(data['month'] == null ? data['deadline'] : "${DateTime.now().year}-${getMonthInt(data['month'])}-${data['deadline'].substring(0, data['deadline'].length - 2)}");
         taskName = data['task'];
         taskDescription = data['description'];
         status = data['status'];

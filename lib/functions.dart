@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 bool validateEmail(String value) {
   return RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
       .hasMatch(value);
 }
 
-Function showAlert(BuildContext context, String title, String text, Function onPressFunction){
+Function showAlert(BuildContext context, String title, String text,
+    Function onPressFunction) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -24,7 +25,7 @@ Function showAlert(BuildContext context, String title, String text, Function onP
   );
 }
 
-String getMonthName(int monthInt){
+String getMonthName(int monthInt) {
   String month;
 
   switch (monthInt) {
@@ -69,7 +70,7 @@ String getMonthName(int monthInt){
   return month;
 }
 
-String getDayName(int dayInt){
+String getDayName(int dayInt) {
   String day;
 
   switch (dayInt) {
@@ -97,4 +98,26 @@ String getDayName(int dayInt){
   }
 
   return day;
+}
+
+String getMonthInt(String monthName) {
+  List<String> monthList = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  String num = (monthList.indexOf(monthName) + 1).toString();
+  if(num.length == 1) num = "0$num";
+
+  return num;
 }

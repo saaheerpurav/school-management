@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_management/functions.dart';
 
 Widget screenHeader(bool isTasks, BuildContext context) {
   return Container(
@@ -20,7 +21,7 @@ Widget screenHeader(bool isTasks, BuildContext context) {
           ),
         ),
         Text(
-          isTasks ? "Your Tasks" : "March ",
+          isTasks ? "Your Tasks" : "${getMonthName(DateTime.parse(DateTime.now().toString()).month)} ",
           textDirection: TextDirection.ltr,
           style: TextStyle(
             decoration: TextDecoration.none,
@@ -31,23 +32,11 @@ Widget screenHeader(bool isTasks, BuildContext context) {
           ),
         ),
         Text(
-          isTasks ? "" : "2021",
+          isTasks ? "" : DateTime.now().year.toString(),
           textDirection: TextDirection.ltr,
           style: TextStyle(
             decoration: TextDecoration.none,
             fontSize: 17,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
-            color: Color(0XFF263064),
-          ),
-        ),
-        Spacer(),
-        Text(
-          "Today",
-          textDirection: TextDirection.ltr,
-          style: TextStyle(
-            decoration: TextDecoration.none,
-            fontSize: 13,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
             color: Color(0XFF263064),

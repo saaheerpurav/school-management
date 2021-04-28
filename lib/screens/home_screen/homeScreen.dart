@@ -56,8 +56,27 @@ class _HomeScreenState extends State<HomeScreen> {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
+        var data = doc.data();
+
         setState(() {
           name = doc['name'];
+
+          allTasks = [];
+          if (data['tasks'] != null) {
+            for (var i in data['tasks']) {
+              allTasks.add(
+                {
+                  "deadline": i['deadline'],
+                  "month": i['month'],
+                  "task": i['task'],
+                  "description": i['description'],
+                  "deadlineMessage": i['deadlineMessage'],
+                  "status": i['status'],
+                  "color": Color(int.parse(i['color'])),
+                },
+              );
+            }
+          }
         });
       });
     });
@@ -214,17 +233,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               '/main/tasks',
                             ),
                             allTasks == null
-                                ? emptyContainer("tasks")
-                                : SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: allTasks
-                                          .map(
-                                            (e) => taskContainer(e),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : allTasks.isEmpty
+                                    ? emptyContainer("tasks")
+                                    : SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: allTasks
+                                              .map(
+                                                (e) => taskContainer(e),
+                                              )
+                                              .toList(),
+                                        ),
+                                      ),
                             SizedBox(height: 20),
                             sectionHeader(
                               "YOUR ACHIEVEMENTS",
