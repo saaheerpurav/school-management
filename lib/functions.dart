@@ -121,3 +121,23 @@ String getMonthInt(String monthName) {
 
   return num;
 }
+
+String getDeadlineMessage(DateTime date) {
+  var difference = date.difference(DateTime.now()).inDays + 1;
+  String deadlineMessage;
+
+  if (difference == 1) {
+    deadlineMessage = "1 Day left";
+  } else {
+    deadlineMessage = "$difference Days left";
+  }
+
+  return deadlineMessage;
+}
+
+String getCorrectDateFormat(Map data){
+  String day = data['deadline'].substring(0, data['deadline'].length - 2);
+  if(day.length == 1) day = "0$day";
+
+  return "${DateTime.now().year}-${getMonthInt(data['month'])}-$day";
+}

@@ -70,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   "month": i['month'],
                   "task": i['task'],
                   "description": i['description'],
-                  "deadlineMessage": i['deadlineMessage'],
+                  "deadlineMessage": getDeadlineMessage(
+                      DateTime.parse(getCorrectDateFormat(i))),
                   "status": i['status'],
                   "color": Color(int.parse(i['color'])),
                 },
@@ -238,14 +239,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 : allTasks.isEmpty
                                     ? emptyContainer("tasks")
-                                    : SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: allTasks
-                                              .map(
-                                                (e) => taskContainer(e),
-                                              )
-                                              .toList(),
+                                    : Container(
+                                        width: double.infinity,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: allTasks
+                                                .map(
+                                                  (e) => taskContainer(e),
+                                                )
+                                                .toList(),
+                                          ),
                                         ),
                                       ),
                             SizedBox(height: 20),

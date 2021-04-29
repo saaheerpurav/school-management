@@ -17,7 +17,6 @@ class _TaskAddFormState extends State<TaskAddForm> {
   var taskDescription;
   var status = 'Incomplete';
 
-
   void callDatePicker() async {
     var order = await getDate();
     setState(() {
@@ -26,29 +25,26 @@ class _TaskAddFormState extends State<TaskAddForm> {
   }
 
   Future<DateTime> getDate() {
-    try {
-      return showDatePicker(
-        context: context,
-        initialDate: widget.existingData == null ? DateTime.now() : deadline,
-        firstDate:  widget.existingData == null ? DateTime.now() : deadline,
-        lastDate: DateTime.now().add(
-          Duration(days: 100),
-        ),
-      );
-    }
-    on Exception catch(_){
-      debugPrint("No");
-    }
+    return showDatePicker(
+      context: context,
+      initialDate: widget.existingData == null ? DateTime.now() : deadline,
+      firstDate: widget.existingData == null ? DateTime.now() : deadline,
+      lastDate: DateTime.now().add(
+        Duration(days: 100),
+      ),
+    );
   }
 
   @override
   void initState() {
     super.initState();
     var data = widget.existingData;
-    if(data != null){
+    if (data != null) {
       //2021-04-28
       setState(() {
-        deadline = DateTime.parse(data['month'] == null ? data['deadline'] : "${DateTime.now().year}-${getMonthInt(data['month'])}-${data['deadline'].substring(0, data['deadline'].length - 2)}");
+        deadline = DateTime.parse(data['month'] == null
+            ? data['deadline']
+            : getCorrectDateFormat(data));
         taskName = data['task'];
         taskDescription = data['description'];
         status = data['status'];
@@ -70,7 +66,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
         TextButton(
           child: Text(isEdit ? "EDIT" : "ADD"),
           onPressed: () {
-            if(isEdit){
+            if (isEdit) {
               widget.callback({
                 'task': taskName,
                 'description': taskDescription,
@@ -79,8 +75,7 @@ class _TaskAddFormState extends State<TaskAddForm> {
                 'isEdit': true,
                 'id': widget.existingData['id'],
               });
-            }
-            else{
+            } else {
               widget.callback({
                 'task': taskName,
                 'description': taskDescription,

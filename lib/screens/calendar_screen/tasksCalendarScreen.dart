@@ -23,10 +23,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String docId;
 
-  int getDate(DateTime date) {
-    return (date.difference(DateTime.now()).inDays + 1);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +45,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                   "month": i['month'],
                   "task": i['task'],
                   "description": i['description'],
-                  "deadlineMessage": i['deadlineMessage'],
+                  "deadlineMessage": getDeadlineMessage(DateTime.parse(getCorrectDateFormat(i))),
                   "formWidget": TaskAddForm(callback, i),
                   "status": i['status'],
                   "color": Color(int.parse(i['color'])),
@@ -65,14 +61,8 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   }
 
   callback(newData) {
-    int deadlineDate = getDate(DateTime.parse(newData['deadline']));
-    String deadlineMessage;
+    String deadlineMessage = getDeadlineMessage(DateTime.parse(newData['deadline']));
 
-    if (deadlineDate == 1) {
-      deadlineMessage = "1 Day left";
-    } else {
-      deadlineMessage = "$deadlineDate Days left";
-    }
     var date = newData['deadline'].split("-").last.toString();
     var month = newData['deadline'].split("-")[1];
     var dateInt = int.parse(date);
@@ -137,7 +127,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
             "month": i['month'],
             "task": i['task'],
             "description": i['description'],
-            "deadlineMessage": i['deadlineMessage'],
             "status": i['status'],
             "color": colourString,
             'id': i['id'],
