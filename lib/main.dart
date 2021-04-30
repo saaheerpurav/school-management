@@ -60,23 +60,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
-    switch (_index) {
-      case 0:
-        child = HomeScreen();
-        break;
-      case 1:
-        child = ProfileScreen();
-        break;
-    }
 
     return Scaffold(
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _index = index);
-          },
           children: <Widget>[
             HomeScreen(),
             ProfileScreen(),

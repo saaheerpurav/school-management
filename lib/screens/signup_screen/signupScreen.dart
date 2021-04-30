@@ -78,7 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           ListView(
             children: <Widget>[
-              SizedBox(height: 100),
+              SizedBox(height: 50),
               Center(
                 child: Text(
                   "SIGNUP",
@@ -94,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               SizedBox(height: 50),
               Image.asset('images/signup.png', height: 200),
-              SizedBox(height: 100),
+              SizedBox(height: 50),
               RoundedInput("Name", Icons.person_rounded, (value) {
                 setState(() {
                   name = value;

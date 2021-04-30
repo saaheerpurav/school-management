@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           ListView(
             children: <Widget>[
-              SizedBox(height: 100),
+              SizedBox(height: 50),
               Center(
                 child: Text(
                   "LOGIN",
@@ -72,9 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 25),
               Image.asset('images/login.png', height: 180),
-              SizedBox(height: MediaQuery.of(context).size.height / 5),
+              SizedBox(height: 100),
               RoundedInput("Email", Icons.email, (value) {
                 setState(() {
                   email = value;

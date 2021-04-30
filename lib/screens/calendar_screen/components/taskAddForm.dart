@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:school_management/functions.dart';
 
 class TaskAddForm extends StatefulWidget {
-  Function(Map) callback;
-  Map existingData;
+  final Function(Map) callback;
+  final Map existingData;
 
   TaskAddForm(this.callback, [this.existingData]);
 

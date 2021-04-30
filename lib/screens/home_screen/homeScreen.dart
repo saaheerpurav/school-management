@@ -5,8 +5,6 @@ import 'package:school_management/screens/home_screen/components/task_container.
 import 'package:school_management/screens/home_screen/components/class_container.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
 
-import 'package:school_management/data/tasks.dart';
-import 'package:school_management/data/colors.dart';
 import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,6 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
       profilePicUrl = url;
     });
   }
+
+
 
   @override
   void initState() {

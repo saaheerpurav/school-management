@@ -9,7 +9,7 @@ class CustomTabBarView extends StatefulWidget {
   @override
   _TabBarViewState createState() => _TabBarViewState();
 
-  Function sendDataToParent;
+  final Function sendDataToParent;
 
   CustomTabBarView(this.sendDataToParent);
 }

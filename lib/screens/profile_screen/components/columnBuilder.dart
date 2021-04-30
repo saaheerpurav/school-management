@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-//ignore: must_be_immutable
 class ColumnBuilder extends StatefulWidget {
-  List list;
-  String type;
-  bool labels;
-  Function callback;
-  Function addField;
+  final List list;
+  final String type;
+  final bool labels;
+  final Function callback;
+  final Function addField;
 
   ColumnBuilder(this.callback, this.addField, this.list, this.type,
       [this.labels = false]);
@@ -74,6 +73,8 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
 
   @override
   void initState() {
+    super.initState();
+
     widget.list.asMap().forEach((key, value) {
       newListMap[key] = createWidget(key, value);
     });

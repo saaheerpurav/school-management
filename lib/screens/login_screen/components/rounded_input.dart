@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RoundedInput extends StatefulWidget {
-  String placeholder;
-  IconData icon;
-  Function onSubmitted;
+  final String placeholder;
+  final IconData icon;
+  final Function onSubmitted;
 
   RoundedInput(this.placeholder, this.icon, [this.onSubmitted]);
 

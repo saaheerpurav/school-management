@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 bool validateEmail(String value) {
   return RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
       .hasMatch(value);
 }
 
-Function showAlert(BuildContext context, String title, String text,
-    Function onPressFunction) {
+showAlert(
+    BuildContext context, String title, String text, Function onPressFunction) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -15,7 +15,7 @@ Function showAlert(BuildContext context, String title, String text,
         title: Text(title),
         content: Text(text),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text("OK"),
             onPressed: onPressFunction,
           ),
@@ -117,7 +117,7 @@ String getMonthInt(String monthName) {
   ];
 
   String num = (monthList.indexOf(monthName) + 1).toString();
-  if(num.length == 1) num = "0$num";
+  if (num.length == 1) num = "0$num";
 
   return num;
 }
@@ -135,9 +135,9 @@ String getDeadlineMessage(DateTime date) {
   return deadlineMessage;
 }
 
-String getCorrectDateFormat(Map data){
+String getCorrectDateFormat(Map data) {
   String day = data['deadline'].substring(0, data['deadline'].length - 2);
-  if(day.length == 1) day = "0$day";
+  if (day.length == 1) day = "0$day";
 
   return "${DateTime.now().year}-${getMonthInt(data['month'])}-$day";
 }
