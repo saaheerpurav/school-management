@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,11 +20,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User user = FirebaseAuth.instance.currentUser;
   String docId;
 
+  String profilePicture;
+  String defaultProfilePictureUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
+
   List skills;
   List interests;
   List information;
 
-  callback(List list1, List list2, List list3){
+  void getUrl() async {
+    String url;
+    try {
+      Reference ref = FirebaseStorage.instance.ref().child(
+          "profile_pictures/${user.email}");
+      url = (await ref.getDownloadURL()).toString();
+    } on Exception catch (_){
+      url = null;
+    }
+
+    setState(() {
+      profilePicture = url;
+    });
+  }
+
+  uploadImg(ImageSource source) async {
+    PickedFile image = await ImagePicker().getImage(source: source);
+
+    Reference ref = FirebaseStorage.instance.ref().child('profile_pictures/${user.email}');
+    await ref.putFile(File(image.path));
+    var downloadUrl = await ref.getDownloadURL();
+
+    setState(() {
+      profilePicture = downloadUrl;
+    });
+  }
+
+  callback(List list1, List list2, List list3) {
     skills = list1;
     interests = list2;
     information = list3;
@@ -28,6 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+
+    getUrl();
     users
         .where('email', isEqualTo: user.email)
         .get()
@@ -70,23 +107,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Center(
                         child: Stack(
                           children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.blueGrey.withOpacity(0.2),
-                                    blurRadius: 12,
-                                    spreadRadius: 8,
-                                  )
-                                ],
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    "https://i.pravatar.cc/150?img=26",
+                            GestureDetector(
+                              onTap: () {
+                                uploadImg(ImageSource.gallery);
+                              },
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blueGrey.withOpacity(0.2),
+                                      blurRadius: 12,
+                                      spreadRadius: 8,
+                                    )
+                                  ],
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      profilePicture ?? defaultProfilePictureUrl,
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -140,10 +182,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CustomTabBarView(callback),
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         color: Color(0xFFebebeb),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: TextButton(
                           onPressed: () {
                             users.doc(docId).update({
@@ -164,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 return AlertDialog(
                                   title: Text("Success"),
                                   content:
-                                      Text("Profile Updated Successfully!"),
+                                  Text("Profile Updated Successfully!"),
                                   actions: [
                                     TextButton(
                                       child: Text("OK"),
@@ -185,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.orange),
+                            MaterialStateProperty.all(Colors.orange),
                           ),
                         ),
                       ),

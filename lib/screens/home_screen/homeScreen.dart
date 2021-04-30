@@ -11,6 +11,7 @@ import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -44,12 +45,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name = "";
-  String email;
+  String email = FirebaseAuth.instance.currentUser.email;
+  String profilePicUrl;
+  String defaultProfilePicUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
+
+  void getUrl() async {
+    String url;
+    try {
+      Reference ref = FirebaseStorage.instance.ref().child(
+          "profile_pictures/$email");
+      url = (await ref.getDownloadURL()).toString();
+    } on Exception catch (_){
+      url = null;
+    }
+
+    setState(() {
+      profilePicUrl = url;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    email = FirebaseAuth.instance.currentUser.email;
+    getUrl();
 
     users
         .where('email', isEqualTo: email)
@@ -160,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=65',
+                                      profilePicUrl ?? defaultProfilePicUrl,
+
                                     ),
                                   ),
                                 ),
