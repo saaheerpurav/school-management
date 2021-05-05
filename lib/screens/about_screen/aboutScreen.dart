@@ -52,7 +52,7 @@ class AboutScreen extends StatelessWidget {
                       Icons.menu,
                       color: Color(0XFF263064),
                     ),
-                    onPressed: () {},
+                    onPressed: () => Scaffold.of(context).openDrawer(),
                     label: Container(
                       width: 0,
                       height: 0,

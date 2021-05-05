@@ -34,9 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     String url;
 
     try {
-      Reference ref = FirebaseStorage.instance
-          .ref()
-          .child("profile_pictures/$email");
+      Reference ref =
+          FirebaseStorage.instance.ref().child("profile_pictures/$email");
       url = (await ref.getDownloadURL()).toString();
     } on Exception catch (_) {
       url = FirebaseAuth.instance.currentUser.photoURL;

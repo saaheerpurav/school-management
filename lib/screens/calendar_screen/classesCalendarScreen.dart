@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/calendar_screen/components/screenHeader.dart';
-import 'package:school_management/screens/calendar_screen/components/calendarEvent.dart';
 import 'package:school_management/screens/calendar_screen/components/calendarDay.dart';
 
 class ClassesCalendarScreen extends StatefulWidget {
@@ -9,113 +8,7 @@ class ClassesCalendarScreen extends StatefulWidget {
 }
 
 class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
-  /*Map<String, List> classes = {
-    "4": [
-      calendarEvent(
-        "09:00",
-        "AM",
-        "1h mins",
-        "English Literature - Class IV",
-        "Figures of Speech",
-        "Room 3F, 1st Floor",
-      ),
-    ],
-    "5": [
-      calendarEvent(
-        "08:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-    ],
-    "6": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "7": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "8": [
-      calendarEvent(
-        "08:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-      calendarEvent(
-        "09:30",
-        "AM",
-        "1h",
-        "Maths - Class IV",
-        "Squares and Cubes",
-        "Room 3D, 2nd Floor",
-      ),
-      calendarEvent(
-        "11:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-      calendarEvent(
-        "12:00",
-        "AM",
-        "1h",
-        "Dance - Class VIII",
-        "Salsa",
-        "Hall, 2nd Floor",
-      ),
-      calendarEvent(
-        "1:00",
-        "PM",
-        "1h",
-        "Craft - Class III",
-        "Creating Pen Stand",
-        "Room 2C, 2nd Floor",
-      ),
-    ],
-    "9": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "10": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-  };*/
-
   Map<String, List> classes;
-
   int selectedDate = 8;
 
   @override

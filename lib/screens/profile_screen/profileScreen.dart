@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () => Scaffold.of(context).openDrawer(),
                           icon: Icon(
                             Icons.menu,
                             color: Color(0XFF263064),

@@ -62,6 +62,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      drawer: CustomDrawer(),
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
@@ -71,7 +72,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           ],
         ),
       ),
-      drawer: drawer(context),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (newIndex) => setState(() {
           _index = newIndex;
