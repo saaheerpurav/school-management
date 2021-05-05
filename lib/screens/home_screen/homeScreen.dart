@@ -23,26 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map> allTasks;
   List allAchievements;
 
-  /*List<Map> allClasses = [
-    {
-      "title": "Geography - Class X",
-      "time": "08:00",
-      "room": "Room 10D, 5th Floor",
-    },
-    {
-      "title": "Maths - Class IV",
-      "time": "09:30",
-      "room": "Room 3d, 2nd Floor",
-    },
-  ];
-
-  List<Map> allTasks = tasks(colors);
-
-  List allAchievements = [
-    'images/badges/best_teacher.png',
-    'images/badges/star_teacher.png',
-  ];*/
-
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
@@ -51,16 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
       "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
 
   void getUrl() async {
-    String url = FirebaseAuth.instance.currentUser.photoURL;
+    String url;
 
-    if (url == null) {
-      try {
-        Reference ref =
-            FirebaseStorage.instance.ref().child("profile_pictures/$email");
-        url = (await ref.getDownloadURL()).toString();
-      } on Exception catch (_) {
-        url = null;
-      }
+    try {
+      Reference ref = FirebaseStorage.instance
+          .ref()
+          .child("profile_pictures/$email");
+      url = (await ref.getDownloadURL()).toString();
+    } on Exception catch (_) {
+      url = FirebaseAuth.instance.currentUser.photoURL;
     }
 
     setState(() {

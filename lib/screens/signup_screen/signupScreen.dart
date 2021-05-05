@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/login_screen/components/rounded_input.dart';
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
+import 'package:school_management/screens/signup_screen/components/google_button.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:school_management/functions.dart';
@@ -78,7 +78,19 @@ class _SignupScreenState extends State<SignupScreen> {
           createAccount();
         });
       } on FirebaseAuthException catch (e) {
-        showAlert(context, "Error", e.message, () {
+        String message;
+
+        if(e.message.contains("empty")){
+          message = "Please enter Email / Password";
+        }
+        else if(e.message.contains("Unable to resolve host")){
+          message = "No Internet Connection";
+        }
+        else{
+          message = e.message;
+        }
+
+        showAlert(context, "Error", message, () {
           Navigator.of(context).pop();
         });
       } catch (e) {
@@ -146,81 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
               roundedButton("SIGNUP", context, signUpWithEmailPassword,
                   Color(0xFF6F35A5)),
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    width: 100,
-                    height: 2,
-                    color: Color(0xFFF1E6FF),
-                  ),
-                  Center(
-                    child: Text(
-                      "OR",
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF6F35A5),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    width: 100,
-                    height: 2,
-                    color: Color(0xFFF1E6FF),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              Center(
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 30),
-                  child: TextButton(
-                    onPressed: signInWithGoogle,
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Colors.grey.withOpacity(0.5),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(50)),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            child: Image.asset(
-                              'images/google.png',
-                              width: 20,
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              "Sign up with Google",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontSize: 17,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              googleButton(signInWithGoogle, "up"),
               SizedBox(height: 15),
             ],
           )

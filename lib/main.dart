@@ -20,7 +20,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(
     MaterialApp(
-      title: 'School Management',
+      title: 'EduLy',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/': (_) => LoginSignupSelectScreen(),

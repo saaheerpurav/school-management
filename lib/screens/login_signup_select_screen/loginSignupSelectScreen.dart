@@ -27,8 +27,11 @@ class LoginSignupSelectScreen extends StatelessWidget {
           Column(
             children: <Widget>[
               SizedBox(height: 100),
-              Image.asset('images/logo.png'),
-              SizedBox(height: MediaQuery.of(context).size.height / 4),
+              Image.asset(
+                'images/logo.png',
+                height: 200,
+              ),
+              Spacer(),
               roundedButton(
                 "LOGIN",
                 context,
@@ -43,6 +46,7 @@ class LoginSignupSelectScreen extends StatelessWidget {
                 Color(0xFFF1E6FF),
                 Color(0XFF263064),
               ),
+              SizedBox(height: 70),
             ],
           )
         ],

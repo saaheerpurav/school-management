@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/login_screen/components/rounded_input.dart';
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
+import 'package:school_management/screens/signup_screen/components/google_button.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:school_management/functions.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,22 +28,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Function login = () async {
+    Future signInWithEmailPassword() async {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
             .then((_) {
           Navigator.of(context).pushNamed('/main');
-          //debugPrint("Ok");
         });
       } on FirebaseAuthException catch (e) {
-        showAlert(context, "Error", e.message, () {
+        String message;
+
+        if(e.message.contains("empty")){
+          message = "Please enter Email / Password";
+        }
+        else if(e.message.contains("Unable to resolve host")){
+          message = "No Internet Connection";
+        }
+        else{
+          message = e.message;
+        }
+
+        showAlert(context, "Error", message, () {
           Navigator.of(context).pop();
         });
       } catch (e) {
         debugPrint(e);
       }
     };
+
+    Future signInWithGoogle() async {
+      //_googleSignIn.signOut();
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+      setState(() {
+        email = user.user.email;
+      });
+      Navigator.of(context).pushNamed('/main');
+    }
 
     return Scaffold(
       body: Stack(
@@ -90,21 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
               roundedButton(
                   "LOGIN",
                   context,
-                  login,
+                  signInWithEmailPassword,
                   Color(0xFF6F35A5)),
               SizedBox(height: 20),
-              Center(
-                child: Text(
-                  "Don't have an Account? Sign Up",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF6F35A5),
-                  ),
-                ),
-              ),
+              googleButton(signInWithGoogle, "in"),
               SizedBox(height: 15),
             ],
           )

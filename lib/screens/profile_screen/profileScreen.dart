@@ -21,23 +21,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String docId;
 
   String profilePicture;
-  String defaultProfilePictureUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
+  String defaultProfilePictureUrl =
+      "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
 
   List skills;
   List interests;
   List information;
 
   void getUrl() async {
-    String url = user.photoURL;
+    String url;
 
-    if (url == null) {
-      try {
-        Reference ref =
-        FirebaseStorage.instance.ref().child("profile_pictures/${user.email}");
-        url = (await ref.getDownloadURL()).toString();
-      } on Exception catch (_) {
-        url = null;
-      }
+    try {
+      Reference ref = FirebaseStorage.instance
+          .ref()
+          .child("profile_pictures/${user.email}");
+      url = (await ref.getDownloadURL()).toString();
+    } on Exception catch (_) {
+      url = user.photoURL;
     }
 
     setState(() {
@@ -48,7 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   uploadImg(ImageSource source) async {
     PickedFile image = await ImagePicker().getImage(source: source);
 
-    Reference ref = FirebaseStorage.instance.ref().child('profile_pictures/${user.email}');
+    Reference ref =
+        FirebaseStorage.instance.ref().child('profile_pictures/${user.email}');
     await ref.putFile(File(image.path));
     var downloadUrl = await ref.getDownloadURL();
 
@@ -128,7 +129,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      profilePicture ?? defaultProfilePictureUrl,
+                                      profilePicture ??
+                                          defaultProfilePictureUrl,
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -185,13 +187,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CustomTabBarView(callback),
                       ),
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         color: Color(0xFFebebeb),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: TextButton(
                           onPressed: () {
                             users.doc(docId).update({
@@ -212,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 return AlertDialog(
                                   title: Text("Success"),
                                   content:
-                                  Text("Profile Updated Successfully!"),
+                                      Text("Profile Updated Successfully!"),
                                   actions: [
                                     TextButton(
                                       child: Text("OK"),
@@ -233,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           style: ButtonStyle(
                             backgroundColor:
-                            MaterialStateProperty.all(Colors.orange),
+                                MaterialStateProperty.all(Colors.orange),
                           ),
                         ),
                       ),
