@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:school_management/screens/home_screen/components/section_header.dart';
@@ -45,16 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
   String profilePicUrl;
-  String defaultProfilePicUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
+  String defaultProfilePicUrl =
+      "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
 
   void getUrl() async {
-    String url;
-    try {
-      Reference ref = FirebaseStorage.instance.ref().child(
-          "profile_pictures/$email");
-      url = (await ref.getDownloadURL()).toString();
-    } on Exception catch (_){
-      url = null;
+    String url = FirebaseAuth.instance.currentUser.photoURL;
+
+    if (url == null) {
+      try {
+        Reference ref =
+            FirebaseStorage.instance.ref().child("profile_pictures/$email");
+        url = (await ref.getDownloadURL()).toString();
+      } on Exception catch (_) {
+        url = null;
+      }
     }
 
     setState(() {
@@ -62,12 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
-
   @override
   void initState() {
     super.initState();
-    getUrl();
 
     users
         .where('email', isEqualTo: email)
@@ -97,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
         });
+        getUrl();
       });
     });
   }
@@ -179,7 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
                                       profilePicUrl ?? defaultProfilePicUrl,
-
                                     ),
                                   ),
                                 ),

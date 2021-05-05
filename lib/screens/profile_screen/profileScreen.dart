@@ -28,13 +28,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List information;
 
   void getUrl() async {
-    String url;
-    try {
-      Reference ref = FirebaseStorage.instance.ref().child(
-          "profile_pictures/${user.email}");
-      url = (await ref.getDownloadURL()).toString();
-    } on Exception catch (_){
-      url = null;
+    String url = user.photoURL;
+
+    if (url == null) {
+      try {
+        Reference ref =
+        FirebaseStorage.instance.ref().child("profile_pictures/${user.email}");
+        url = (await ref.getDownloadURL()).toString();
+      } on Exception catch (_) {
+        url = null;
+      }
     }
 
     setState(() {
