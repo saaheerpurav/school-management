@@ -61,7 +61,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        key: PageStorageKey('pagestore'),
         padding: EdgeInsets.zero,
         children: <Widget>[
           Container(
@@ -124,13 +123,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           ),
           ListTile(
-            title: Text('Home'),
-            leading: Icon(Icons.home),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/main');
-            },
-          ),
-          ListTile(
             title: Text('Classes'),
             leading: Icon(Icons.library_books),
             onTap: () {
@@ -145,15 +137,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           ListTile(
-            title: Text('Profile'),
-            leading: Icon(Icons.account_box),
-            onTap: () {},
-          ),
-          ListTile(
             title: Text('Logout'),
             leading: Icon(Icons.logout),
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+              FirebaseAuth.instance.signOut().then((value){
+                Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+              });
             },
           ),
           ListTile(

@@ -48,14 +48,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
 
   @override
   void initState() {
-    super.initState();
     _pageController = PageController();
+    super.initState();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -65,6 +65,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
+          onPageChanged: (newIndex) {
+            setState(() {
+              _index = newIndex;
+            });
+          },
           children: <Widget>[
             HomeScreen(),
             ProfileScreen(),

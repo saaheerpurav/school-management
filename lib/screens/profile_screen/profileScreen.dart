@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
+import 'package:school_management/drawer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,6 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       body: Container(
         color: Color(0XFFD4E7FE),
         padding: EdgeInsets.only(top: 24),

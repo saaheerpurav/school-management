@@ -33,13 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
       } on FirebaseAuthException catch (e) {
         String message;
 
-        if(e.message.contains("empty")){
+        if (e.message.contains("empty")) {
           message = "Please enter Email / Password";
-        }
-        else if(e.message.contains("Unable to resolve host")){
+        } else if (e.message.contains("Unable to resolve host")) {
           message = "No Internet Connection";
-        }
-        else{
+        } else {
           message = e.message;
         }
 
@@ -49,19 +47,22 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (e) {
         debugPrint(e);
       }
-    };
+    }
+
+    ;
 
     Future signInWithGoogle() async {
       //_googleSignIn.signOut();
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential user =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       setState(() {
         email = user.user.email;
       });
@@ -121,10 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
               }),
               SizedBox(height: 15),
               roundedButton(
-                  "LOGIN",
-                  context,
-                  signInWithEmailPassword,
-                  Color(0xFF6F35A5)),
+                  "LOGIN", context, signInWithEmailPassword, Color(0xFF6F35A5)),
               SizedBox(height: 20),
               googleButton(signInWithGoogle, "in"),
               SizedBox(height: 15),

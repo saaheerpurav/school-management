@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
 
-class LoginSignupSelectScreen extends StatelessWidget {
+class LoginSignupSelectScreen extends StatefulWidget {
+  @override
+  _LoginSignupSelectScreenState createState() =>
+      _LoginSignupSelectScreenState();
+}
+
+class _LoginSignupSelectScreenState extends State<LoginSignupSelectScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Container(
+      color: Colors.white,
+      child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
