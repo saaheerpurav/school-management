@@ -28,6 +28,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List interests;
   List information;
 
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
   void getUrl() async {
     String url;
 
@@ -83,6 +90,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -101,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          onPressed: () => Scaffold.of(context).openDrawer(),
+                          onPressed: ()=>Scaffold.of(context).openDrawer(),
                           icon: Icon(
                             Icons.menu,
                             color: Color(0XFF263064),

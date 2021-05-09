@@ -22,6 +22,29 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String docId;
 
+  Widget deleteTask(Map data, BuildContext context) {
+    return AlertDialog(
+      title: Text("Delete Task"),
+      content: Text("Are you sure you want to delete this task?"),
+      actions: <Widget>[
+        TextButton(
+          child: Text("CANCEL"),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        TextButton(
+          child: Text("DELETE"),
+          onPressed: () {
+            setState(() {
+              allTasks.removeWhere((e) => e['id'] == data['id']);
+            });
+            sendTasksToDB();
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,11 +67,12 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                   "month": i['month'],
                   "task": i['task'],
                   "description": i['description'],
-                  "deadlineMessage": getDeadlineMessage(DateTime.parse(getCorrectDateFormat(i))),
+                  "deadlineMessage": getDeadlineMessage(
+                      DateTime.parse(getCorrectDateFormat(i))),
                   "formWidget": TaskAddForm(callback, i),
+                  "deleteBox": deleteTask(i, context),
                   "status": i['status'],
                   "color": Color(int.parse(i['color'])),
-                  "context": context,
                   'id': i['id'],
                 },
               );
@@ -59,8 +83,31 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
     });
   }
 
+  sendTasksToDB() {
+    List tasksToSend = [];
+
+    for (var i in allTasks) {
+      var colourTemp = i['color'].toString().split("0xff")[1];
+      String colourString =
+          "0xff" + colourTemp.substring(0, colourTemp.length - 1);
+
+      tasksToSend.add({
+        "deadline": i['deadline'],
+        "month": i['month'],
+        "task": i['task'],
+        "description": i['description'],
+        "status": i['status'],
+        "color": colourString,
+        'id': i['id'],
+      });
+    }
+
+    users.doc(docId).update({'tasks': tasksToSend});
+  }
+
   callback(newData) {
-    String deadlineMessage = getDeadlineMessage(DateTime.parse(newData['deadline']));
+    String deadlineMessage =
+        getDeadlineMessage(DateTime.parse(newData['deadline']));
 
     var date = newData['deadline'].split("-").last.toString();
     var month = newData['deadline'].split("-")[1];
@@ -85,56 +132,36 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
 
     month = getMonthName(monthInt);
 
-    setState(
-      () {
-        if (newData['isEdit'] == true) {
-          var taskToEdit = allTasks[allTasks
-              .indexOf(allTasks.firstWhere((e) => e['id'] == newData['id']))];
-          taskToEdit['deadline'] = date;
-          taskToEdit['month'] = month;
-          taskToEdit['task'] = newData['task'];
-          taskToEdit['description'] = newData['description'];
-          taskToEdit['status'] = newData['status'];
-          taskToEdit['deadlineMessage'] = deadlineMessage;
-          taskToEdit['formWidget'] = TaskAddForm(callback, newData);
-          taskToEdit['context'] = context;
-        } else {
-          allTasks.add(
-            {
-              "deadline": date,
-              "month": month,
-              "task": newData['task'],
-              "description": newData['description'],
-              "deadlineMessage": deadlineMessage,
-              "formWidget": TaskAddForm(callback, newData),
-              "status": newData['status'],
-              "color": (colors.toList()..shuffle()).first,
-              "context": context,
-              'id': newData['id'],
-            },
-          );
-        }
-
-        List tasksToSend = [];
-
-        for (var i in allTasks) {
-          var colourTemp = i['color'].toString().split("0xff")[1];
-          String colourString = "0xff" + colourTemp.substring(0, colourTemp.length - 1);
-
-          tasksToSend.add({
-            "deadline": i['deadline'],
-            "month": i['month'],
-            "task": i['task'],
-            "description": i['description'],
-            "status": i['status'],
-            "color": colourString,
-            'id': i['id'],
-          });
-        }
-
-        users.doc(docId).update({'tasks': tasksToSend});
-      },
-    );
+    setState(() {
+      if (newData['isEdit'] == true) {
+        var taskToEdit = allTasks[allTasks
+            .indexOf(allTasks.firstWhere((e) => e['id'] == newData['id']))];
+        taskToEdit['deadline'] = date;
+        taskToEdit['month'] = month;
+        taskToEdit['task'] = newData['task'];
+        taskToEdit['description'] = newData['description'];
+        taskToEdit['status'] = newData['status'];
+        taskToEdit['deadlineMessage'] = deadlineMessage;
+        taskToEdit['formWidget'] = TaskAddForm(callback, newData);
+        taskToEdit['deleteBox'] = deleteTask(newData, context);
+      } else {
+        allTasks.add(
+          {
+            "deadline": date,
+            "month": month,
+            "task": newData['task'],
+            "description": newData['description'],
+            "deadlineMessage": deadlineMessage,
+            "formWidget": TaskAddForm(callback, newData),
+            "deleteBox": deleteTask(newData, context),
+            "status": newData['status'],
+            "color": (colors.toList()..shuffle()).first,
+            'id': newData['id'],
+          },
+        );
+      }
+    });
+    sendTasksToDB();
   }
 
   @override
@@ -211,7 +238,7 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                                   : Column(
                                       children: newTaskList
                                           .map(
-                                            (e) => calendarEvent(
+                                            (e) => CalendarEvent(
                                               e['deadline'],
                                               e['month'],
                                               "",
@@ -219,10 +246,10 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                                               e['description'],
                                               e['deadlineMessage'],
                                               e['formWidget'],
+                                              e['deleteBox'],
                                               e['status'],
                                               true,
                                               e['color'],
-                                              e['context'],
                                             ),
                                           )
                                           .toList(),

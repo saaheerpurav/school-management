@@ -17,6 +17,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String defaultProfilePicUrl =
       "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void getUrl() async {
     String url;
 

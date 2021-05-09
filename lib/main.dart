@@ -60,7 +60,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: CustomDrawer(),
       body: SizedBox.expand(

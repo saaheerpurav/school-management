@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:school_management/screens/home_screen/components/section_header.dart';
@@ -19,6 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /*List<Map> allClasses = [
+    {
+      'time': '08:00',
+      'title': 'Geography - Class X',
+      'room': 'Room 10D, 5th Floor',
+    },
+    {
+      'time': '09:30',
+      'title': 'English Literature - Class IV',
+      'room': 'Room 3F, 1st Floor',
+    },
+  ];*/
   List<Map> allClasses;
   List<Map> allTasks;
   List allAchievements;
@@ -29,6 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String profilePicUrl;
   String defaultProfilePicUrl =
       "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   void getUrl() async {
     String url;
@@ -49,11 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
     users
         .where('email', isEqualTo: email)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         var data = doc.data();
 
@@ -81,6 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
         getUrl();
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
