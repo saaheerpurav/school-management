@@ -47,9 +47,17 @@ class _LoginSignupSelectScreenState extends State<LoginSignupSelectScreen> {
               ),
               SizedBox(height: 15),
               roundedButton(
-                "SIGNUP",
+                "SIGNUP AS TEACHER",
                 context,
                 () => Navigator.of(context).pushNamed('/signup'),
+                Color(0xFFF1E6FF),
+                Color(0XFF263064),
+              ),
+              SizedBox(height: 15),
+              roundedButton(
+                "SIGNUP AS SCHOOL",
+                context,
+                () => Navigator.of(context).pushNamed('/signup_school'),
                 Color(0xFFF1E6FF),
                 Color(0XFF263064),
               ),

@@ -3,6 +3,7 @@ import 'package:school_management/screens/login_screen/components/rounded_input.
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
 import 'package:school_management/screens/signup_screen/components/google_button.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -21,14 +22,31 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
 
+  checkWhereExists(String collection) async{
+    bool exists = false;
+    await FirebaseFirestore.instance.collection(collection).where('email', isEqualTo: email).get().then((QuerySnapshot snapshot){
+      snapshot.docs.forEach((doc) {
+        if(doc.data()['email'] == email) exists = true;
+        else exists = false;
+      });
+    });
+    return exists;
+  }
+
   @override
   Widget build(BuildContext context) {
     Future signInWithEmailPassword() async {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((_) {
-          Navigator.of(context).pushNamed('/main');
+            .then((_) async{
+          if(await checkWhereExists('users')){
+            Navigator.of(context).pushNamed('/main');
+          }
+          else{
+            print(await checkWhereExists('schools'));
+            print("School");
+          }
         });
       } on FirebaseAuthException catch (e) {
         String message;
@@ -45,14 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.of(context).pop();
         });
       } catch (e) {
-        debugPrint(e);
+        debugPrint(e.toString());
       }
     }
 
-    ;
-
     Future signInWithGoogle() async {
-      //_googleSignIn.signOut();
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;

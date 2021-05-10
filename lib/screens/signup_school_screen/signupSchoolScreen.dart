@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/screens/login_screen/components/rounded_input.dart';
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
-import 'package:school_management/screens/signup_screen/components/google_button.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:school_management/functions.dart';
 
-GoogleSignIn _googleSignIn = GoogleSignIn();
-
-class SignupScreen extends StatefulWidget {
+class SignupSchoolScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _SignupScreenState();
+    return _SignupSchoolScreenState();
   }
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+class _SignupSchoolScreenState extends State<SignupSchoolScreen> {
+  CollectionReference schools =
+      FirebaseFirestore.instance.collection('schools');
 
   String name = "";
   String email = "";
@@ -28,42 +25,60 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     Function createAccount = () async {
-      users
-          .add({
-            'name': name,
-            'email': email,
-          })
-          .then(
-            showAlert(
-              context,
-              "Success",
-              "Successfully Signed Up!",
-              () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/main');
-              },
-            ),
-          )
-          .catchError((error) => print("Failed to add user: $error"));
+      schools.add({
+        'name': name,
+        'email': email,
+      }).then(
+        (value) {
+          String docId = value.id;
+          String schoolCode = docId.toLowerCase().substring(0, 9);
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Successfully Signed Up!"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Your School Code is"),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        schoolCode,
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          color: Color(0XFF263064),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Please share it with your teachers so they can join your school.",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      schools.doc(docId).update({
+                        'school_code': schoolCode,
+                      });
+                      Navigator.pop(context);
+                      //Navigator.of(context).pushNamed('/main');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ).catchError((error) => print("Failed to add school: $error"));
     };
-
-    Future signInWithGoogle() async {
-      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential user =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      setState(() {
-        email = user.user.email;
-        name = user.user.displayName;
-      });
-      createAccount();
-    }
 
     Future signUpWithEmailPassword() async {
       try {
@@ -116,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 50),
               Center(
                 child: Text(
-                  "SIGNUP",
+                  "SCHOOL SIGNUP",
                   textDirection: TextDirection.ltr,
                   style: TextStyle(
                     decoration: TextDecoration.none,
@@ -128,9 +143,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               SizedBox(height: 50),
-              Image.asset('images/signup.png', height: 200),
+              Image.asset('images/welcome.png', height: 200),
               SizedBox(height: 50),
-              RoundedInput("Name", Icons.person_rounded, (value) {
+              RoundedInput("School Name", Icons.school, (value) {
                 setState(() {
                   name = value;
                 });
@@ -150,8 +165,6 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 15),
               roundedButton("SIGNUP", context, signUpWithEmailPassword,
                   Color(0xFF6F35A5)),
-              SizedBox(height: 15),
-              googleButton(signInWithGoogle, "up"),
               SizedBox(height: 15),
             ],
           )
