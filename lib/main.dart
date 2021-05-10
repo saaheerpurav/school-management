@@ -8,6 +8,9 @@ import 'package:school_management/screens/home_screen/homeScreen.dart';
 import 'package:school_management/screens/login_screen/loginScreen.dart';
 import 'package:school_management/screens/profile_screen/profileScreen.dart';
 import 'package:school_management/screens/about_screen/aboutScreen.dart';
+
+import 'package:school_management/screens/admin_home_screen/adminHomeScreen.dart';
+
 import 'package:school_management/screens/signup_screen/signupScreen.dart';
 import 'package:school_management/screens/signup_school_screen/signupSchoolScreen.dart';
 import 'package:school_management/screens/login_signup_select_screen/loginSignupSelectScreen.dart';
@@ -28,15 +31,20 @@ Future<void> main() async {
         '/signup': (_) => SignupScreen(),
         '/signup_school': (_) => SignupSchoolScreen(),
         '/about': (_) => AboutScreen(),
-        '/main': (_) => BottomNavigator(),
+        '/main': (_) => BottomNavigator("teacher"),
         '/main/classes': (_) => ClassesCalendarScreen(),
         '/main/tasks': (_) => TasksCalendarScreen(),
+        '/admin': (_) => BottomNavigator("school"),
       },
     ),
   );
 }
 
 class BottomNavigator extends StatefulWidget {
+  String type;
+
+  BottomNavigator(this.type);
+
   @override
   State<StatefulWidget> createState() {
     return _BottomNavigatorState();
@@ -65,17 +73,20 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       drawer: CustomDrawer(),
       body: SizedBox.expand(
         child: PageView(
-          controller: _pageController,
-          onPageChanged: (newIndex) {
-            setState(() {
-              _index = newIndex;
-            });
-          },
-          children: <Widget>[
-            HomeScreen(),
-            ProfileScreen(),
-          ],
-        ),
+            controller: _pageController,
+            onPageChanged: (newIndex) {
+              setState(() {
+                _index = newIndex;
+              });
+            },
+            children: widget.type == 'teacher'
+                ? <Widget>[
+                    HomeScreen(),
+                    ProfileScreen(),
+                  ]
+                : <Widget>[
+                    AdminHomeScreen(),
+                  ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (newIndex) => setState(() {

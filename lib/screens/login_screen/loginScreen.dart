@@ -22,12 +22,18 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
 
-  checkWhereExists(String collection) async{
+  checkWhereExists(String collection) async {
     bool exists = false;
-    await FirebaseFirestore.instance.collection(collection).where('email', isEqualTo: email).get().then((QuerySnapshot snapshot){
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .where('email', isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((doc) {
-        if(doc.data()['email'] == email) exists = true;
-        else exists = false;
+        if (doc.data()['email'] == email)
+          exists = true;
+        else
+          exists = false;
       });
     });
     return exists;
@@ -39,13 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((_) async{
-          if(await checkWhereExists('users')){
+            .then((_) async {
+          if (await checkWhereExists('users')) {
             Navigator.of(context).pushNamed('/main');
-          }
-          else{
-            print(await checkWhereExists('schools'));
-            print("School");
+          } else if (await checkWhereExists('schools')) {
+            Navigator.of(context).pushNamed('/admin');
           }
         });
       } on FirebaseAuthException catch (e) {

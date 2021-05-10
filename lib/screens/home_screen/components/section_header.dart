@@ -19,15 +19,15 @@ Widget sectionHeader(String title, BuildContext context, [String route]) {
         Spacer(),
         SizedBox(
           height: 30,
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                route,
-              );
-            },
-            child: route != null
-                ? Text(
+          child: route != null
+              ? TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      route,
+                    );
+                  },
+                  child: Text(
                     "See All",
                     textDirection: TextDirection.ltr,
                     style: TextStyle(
@@ -39,12 +39,12 @@ Widget sectionHeader(String title, BuildContext context, [String route]) {
                         0XFF263064,
                       ),
                     ),
-                  )
-                : Container(
-                    width: 0,
-                    height: 0,
                   ),
-          ),
+                )
+              : Container(
+                  width: 0,
+                  height: 0,
+                ),
         )
       ],
     ),

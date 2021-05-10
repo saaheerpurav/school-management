@@ -4,6 +4,7 @@ import 'package:school_management/screens/home_screen/components/section_header.
 import 'package:school_management/screens/home_screen/components/task_container.dart';
 import 'package:school_management/screens/home_screen/components/class_container.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
+import 'package:school_management/screens/home_screen/components/join_school_form.dart';
 
 import 'package:school_management/functions.dart';
 
@@ -37,6 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String schoolCode;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference schools = FirebaseFirestore.instance.collection('schools');
+
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
   String profilePicUrl;
@@ -100,6 +103,19 @@ class _HomeScreenState extends State<HomeScreen> {
         getUrl();
       });
     });
+
+    /*schools.where('school_code', isEqualTo: schoolCode)
+    // load school code when loading user data above
+    // use this code to get school name
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        var data = doc.data();
+        setState(() {
+          schoolName = data['name'];
+        });
+      });
+    });*/
   }
 
   @override
@@ -262,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: CircularProgressIndicator(),
                                   )
                                 : allTasks.isEmpty
-                                    ? emptyContainer("tasks")
+                                    ? emptyContainer("You have no tasks")
                                     : Container(
                                         width: double.infinity,
                                         child: SingleChildScrollView(
@@ -310,7 +326,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       TextButton(
                                         child: Text("Join a school"),
                                         onPressed: () {
-                                          
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return JoinSchoolForm();
+                                            },
+                                          );
                                         },
                                       )
                                     ],

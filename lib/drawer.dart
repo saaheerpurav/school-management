@@ -12,6 +12,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name = "";
+  String type;
   String email = FirebaseAuth.instance.currentUser.email;
   String profilePicUrl;
   String defaultProfilePicUrl =
@@ -28,8 +29,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     String url;
 
     try {
-      Reference ref =
-          FirebaseStorage.instance.ref().child("profile_pictures/$email");
+      Reference ref = FirebaseStorage.instance.ref().child("profile_pictures/$email");
       url = (await ref.getDownloadURL()).toString();
     } on Exception catch (_) {
       url = FirebaseAuth.instance.currentUser.photoURL;
@@ -40,21 +40,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
     });
   }
 
+  checkWhereExists(String collection) async {
+    bool exists = false;
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .where('email', isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((doc) {
+        if (doc.data()['email'] == email) {
+          exists = true;
+          setState(() {
+            name = doc.data()['name'];
+          });
+        } else {
+          exists = false;
+        }
+      });
+    });
+    return exists;
+  }
+
+  void asyncMethod() async {
+    if (await checkWhereExists('users')) {
+      setState(() {
+        type = "teacher";
+      });
+    } else if (await checkWhereExists('schools')) {
+      setState(() {
+        type = "admin";
+      });
+    }
+    else{
+      print("Error");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
-    users
-        .where('email', isEqualTo: email)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        setState(() {
-          name = doc['name'];
-        });
-        getUrl();
-      });
-    });
+    getUrl();
+    asyncMethod();
   }
 
   @override
@@ -122,25 +148,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
           ),
-          ListTile(
-            title: Text('Classes'),
-            leading: Icon(Icons.library_books),
-            onTap: () {
-              Navigator.pushNamed(context, '/main/classes');
-            },
-          ),
-          ListTile(
-            title: Text('Tasks'),
-            leading: Icon(Icons.fact_check),
-            onTap: () {
-              Navigator.pushNamed(context, '/main/tasks');
-            },
-          ),
+          type == null
+              ? Container()
+              : type == "teacher"
+                  ? Column(
+                    children: [
+                      ListTile(
+                          title: Text('Classes'),
+                          leading: Icon(Icons.library_books),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/main/classes');
+                          },
+                        ),
+                      ListTile(
+                        title: Text('Tasks'),
+                        leading: Icon(Icons.fact_check),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/main/tasks');
+                        },
+                      ),
+                    ],
+                  )
+                  : Container(),
           ListTile(
             title: Text('Logout'),
             leading: Icon(Icons.logout),
             onTap: () {
-              FirebaseAuth.instance.signOut().then((value){
+              FirebaseAuth.instance.signOut().then((value) {
                 Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
               });
             },
