@@ -33,6 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map> allTasks;
   List allAchievements;
 
+  String schoolName;
+  String schoolCode;
+
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
@@ -240,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               '/main/classes',
                             ),
                             allClasses == null
-                                ? emptyContainer("classes")
+                                ? emptyContainer("You have no classes")
                                 : Column(
                                     children: allClasses
                                         .map(
@@ -279,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                             ),
                             allAchievements == null
-                                ? emptyContainer("achievements")
+                                ? emptyContainer("You have no achievements")
                                 : Row(
                                     children: allAchievements
                                         .map(
@@ -295,6 +298,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                         .toList(),
                                   ),
+                            SizedBox(height: 20),
+                            sectionHeader(
+                              "YOUR SCHOOL",
+                              context,
+                            ),
+                            schoolName == null
+                                ? Column(
+                                    children: [
+                                      emptyContainer("You haven't joined a school"),
+                                      TextButton(
+                                        child: Text("Join a school"),
+                                        onPressed: () {
+                                          
+                                        },
+                                      )
+                                    ],
+                                  )
+                                : Text("SCHOOL")
                           ],
                         ),
                       ),

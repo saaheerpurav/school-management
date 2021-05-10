@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget emptyContainer(String type) {
+Widget emptyContainer(String text) {
   return Container(
     width: double.infinity,
     padding: EdgeInsets.all(10),
@@ -9,6 +9,6 @@ Widget emptyContainer(String type) {
       color: Colors.grey.withOpacity(0.2),
       borderRadius: BorderRadius.circular(10),
     ),
-    child: Text("You have no $type"),
+    child: Text(text),
   );
 }

@@ -48,6 +48,9 @@ class _SignupScreenState extends State<SignupScreen> {
     };
 
     Future signInWithGoogle() async {
+      if (FirebaseAuth.instance.currentUser != null) {
+        await _googleSignIn.signOut();
+      }
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;

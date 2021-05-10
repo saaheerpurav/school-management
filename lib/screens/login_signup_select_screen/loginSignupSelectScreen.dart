@@ -8,6 +8,46 @@ class LoginSignupSelectScreen extends StatefulWidget {
 }
 
 class _LoginSignupSelectScreenState extends State<LoginSignupSelectScreen> {
+  selectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Who are you signing up as?"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text("Teacher"),
+                leading: Icon(Icons.person),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed('/signup');
+                },
+              ),
+              ListTile(
+                title: Text("School Admin"),
+                leading: Icon(Icons.school),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed('/signup_school');
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,17 +87,9 @@ class _LoginSignupSelectScreenState extends State<LoginSignupSelectScreen> {
               ),
               SizedBox(height: 15),
               roundedButton(
-                "SIGNUP AS TEACHER",
+                "SIGNUP",
                 context,
-                () => Navigator.of(context).pushNamed('/signup'),
-                Color(0xFFF1E6FF),
-                Color(0XFF263064),
-              ),
-              SizedBox(height: 15),
-              roundedButton(
-                "SIGNUP AS SCHOOL",
-                context,
-                () => Navigator.of(context).pushNamed('/signup_school'),
+                selectionDialog,
                 Color(0xFFF1E6FF),
                 Color(0XFF263064),
               ),
