@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 
 class JoinSchoolForm extends StatefulWidget {
+  final Function onSubmit;
+
+  JoinSchoolForm(this.onSubmit);
+
   @override
   _JoinSchoolFormState createState() => _JoinSchoolFormState();
 }
 
 class _JoinSchoolFormState extends State<JoinSchoolForm> {
+  String code;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -15,6 +21,11 @@ class _JoinSchoolFormState extends State<JoinSchoolForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
+            onChanged: (value){
+              setState(() {
+                code = value;
+              });
+            },
             decoration: InputDecoration(
               labelText: "School Code",
               hintText: "Enter School Code",
@@ -32,7 +43,7 @@ class _JoinSchoolFormState extends State<JoinSchoolForm> {
         TextButton(
           child: Text("JOIN"),
           onPressed: () {
-            Navigator.pop(context);
+            widget.onSubmit(code);
           },
         ),
       ],

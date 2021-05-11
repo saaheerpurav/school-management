@@ -5,7 +5,6 @@ import 'package:school_management/screens/home_screen/components/task_container.
 import 'package:school_management/screens/home_screen/components/class_container.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
 import 'package:school_management/screens/home_screen/components/join_school_form.dart';
-import 'package:school_management/screens/admin_home_screen/components/teacherContainer.dart';
 
 import 'package:school_management/functions.dart';
 
@@ -105,23 +104,12 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
         });
+        if (data['school_code'] != null) {
+          getSchoolNameFromCode(data['school_code']);
+        }
         getUrl();
       });
     });
-
-    if(schoolCode != null) {
-      schools
-          .where('school_code', isEqualTo: schoolCode)
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          var data = doc.data();
-          setState(() {
-            schoolName = data['name'];
-          });
-        });
-      });
-    }
   }
 
   @override
@@ -129,10 +117,31 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  leaveSchool(){
+  getSchoolNameFromCode(String code) {
+    schools
+        .where('school_code', isEqualTo: code)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          schoolName = doc.data()['name'];
+          schoolCode = doc.data()['school_code'];
+        });
+      });
+    });
+  }
+
+  joinSchool(String code) {
+    users.doc(docId).update({
+      'school_code': code,
+    }).whenComplete(getSchoolNameFromCode(code));
+    Navigator.of(context).pop();
+  }
+
+  leaveSchool() {
     users.doc(docId).update({
       'school_code': FieldValue.delete(),
-    }).whenComplete((){
+    }).whenComplete(() {
       setState(() {
         schoolName = null;
         schoolCode = null;
@@ -348,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return JoinSchoolForm();
+                                              return JoinSchoolForm(joinSchool);
                                             },
                                           );
                                         },
@@ -356,14 +365,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   )
                                 : Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
                                     margin: EdgeInsets.only(bottom: 10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.grey.withOpacity(0.3),
+                                          color: Colors.grey.withOpacity(0.4),
                                           blurRadius: 20,
                                           spreadRadius: 1,
                                         )
@@ -374,11 +384,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text(schoolName),
                                         Spacer(),
                                         TextButton(
-                                          child: Text("Leave School"),
-                                          onPressed: (){
-                                            showAlert(context, "Leave School", "Are you sure you want to leave this school?", leaveSchool, "LEAVE");
-                                          }
-                                        )
+                                            child: Text("Leave School"),
+                                            onPressed: () {
+                                              showAlert(
+                                                  context,
+                                                  "Leave School",
+                                                  "Are you sure you want to leave this school?",
+                                                  leaveSchool,
+                                                  "LEAVE");
+                                            })
                                       ],
                                     ),
                                   )

@@ -21,6 +21,7 @@ import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.da
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(
     MaterialApp(
       title: 'EduLy',
@@ -41,7 +42,7 @@ Future<void> main() async {
 }
 
 class BottomNavigator extends StatefulWidget {
-  String type;
+  final String type;
 
   BottomNavigator(this.type);
 
@@ -73,20 +74,22 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       drawer: CustomDrawer(),
       body: SizedBox.expand(
         child: PageView(
-            controller: _pageController,
-            onPageChanged: (newIndex) {
-              setState(() {
-                _index = newIndex;
-              });
-            },
-            children: widget.type == 'teacher'
-                ? <Widget>[
-                    HomeScreen(),
-                    ProfileScreen(),
-                  ]
-                : <Widget>[
-                    AdminHomeScreen(),
-                  ]),
+          controller: _pageController,
+          onPageChanged: (newIndex) {
+            setState(() {
+              _index = newIndex;
+            });
+          },
+          children: widget.type == 'teacher'
+              ? <Widget>[
+                  HomeScreen(),
+                  ProfileScreen(),
+                ]
+              : <Widget>[
+                  AdminHomeScreen(),
+                  ProfileScreen(),
+                ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (newIndex) => setState(() {
@@ -104,20 +107,35 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(color: Colors.blueGrey[600]),
-        items: [
-          BottomNavigationBarItem(
-            icon: _index == 0
-                ? Icon(Icons.home_filled)
-                : Icon(Icons.home_outlined),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: _index == 1
-                ? Icon(Icons.account_box)
-                : Icon(Icons.account_box_outlined),
-            label: "Profile",
-          ),
-        ],
+        items: widget.type == "teacher"
+            ? [
+                BottomNavigationBarItem(
+                  icon: _index == 0
+                      ? Icon(Icons.home_filled)
+                      : Icon(Icons.home_outlined),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: _index == 1
+                      ? Icon(Icons.account_box)
+                      : Icon(Icons.account_box_outlined),
+                  label: "Profile",
+                ),
+              ]
+            : [
+                BottomNavigationBarItem(
+                  icon: _index == 0
+                      ? Icon(Icons.home_filled)
+                      : Icon(Icons.home_outlined),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: _index == 1
+                      ? Icon(Icons.account_box)
+                      : Icon(Icons.account_box_outlined),
+                  label: "Profile",
+                ),
+              ],
       ),
     );
   }
