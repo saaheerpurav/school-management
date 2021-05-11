@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];*/
   List<Map> allClasses;
   List<Map> allTasks;
-  List allAchievements;
+  List<String> allAchievements;
 
   String schoolName;
   String schoolCode;
@@ -84,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           name = data['name'];
           schoolCode = data['school_code'];
+          allAchievements = data['achievements'] == null ? [] : [...data['achievements']];
           docId = doc.id;
 
           allTasks = [];
@@ -141,10 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
   leaveSchool() {
     users.doc(docId).update({
       'school_code': FieldValue.delete(),
+      'achievements': FieldValue.delete(),
     }).whenComplete(() {
       setState(() {
         schoolName = null;
         schoolCode = null;
+        allAchievements = [];
       });
     });
     Navigator.of(context).pop();
@@ -324,21 +327,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               "YOUR ACHIEVEMENTS",
                             ),
                             allAchievements == null
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                                : allAchievements.isEmpty
                                 ? emptyContainer("You have no achievements")
                                 : Row(
-                                    children: allAchievements
-                                        .map(
-                                          (e) => Card(
-                                            elevation: 18.0,
-                                            color: Colors.transparent,
-                                            shape: CircleBorder(),
-                                            child: Image.asset(
-                                              e,
-                                              height: 80,
-                                            ),
+                                    children: [
+                                      for (var e in allAchievements)
+                                        Card(
+                                          elevation: 18.0,
+                                          color: Colors.transparent,
+                                          shape: CircleBorder(),
+                                          child: Image.asset(
+                                            'images/badges/$e.png',
+                                            height: 60,
                                           ),
-                                        )
-                                        .toList(),
+                                        ),
+                                    ],
                                   ),
                             SizedBox(height: 20),
                             sectionHeader(
@@ -383,15 +389,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text(schoolName),
                                         Spacer(),
                                         TextButton(
-                                            child: Text("Leave School"),
-                                            onPressed: () {
-                                              showAlert(
-                                                  context,
-                                                  "Leave School",
-                                                  "Are you sure you want to leave this school?",
-                                                  leaveSchool,
-                                                  "LEAVE");
-                                            })
+                                          child: Text("Leave School"),
+                                          onPressed: () {
+                                            showAlert(
+                                              context,
+                                              "Leave School",
+                                              "Are you sure you want to leave this school?",
+                                              leaveSchool,
+                                              "LEAVE",
+                                            );
+                                          },
+                                        )
                                       ],
                                     ),
                                   )

@@ -41,6 +41,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     schools
@@ -66,6 +78,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         querySnapshot.docs.forEach((doc) async {
           var data = doc.data();
           data['profile_picture_url'] = await getUrl(data['email']);
+          data['doc_id'] = doc.id;
 
           setState(() {
             allTeachers.add(data);
