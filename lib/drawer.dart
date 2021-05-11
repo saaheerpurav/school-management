@@ -123,6 +123,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Center(
                     child: Text(
                       name,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         decoration: TextDecoration.none,
                         fontSize: 20,
@@ -135,6 +137,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Center(
                     child: Text(
                       email,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         decoration: TextDecoration.none,
                         fontSize: 14,

@@ -69,7 +69,7 @@ class _SignupSchoolScreenState extends State<SignupSchoolScreen> {
                         'school_code': schoolCode,
                       });
                       Navigator.pop(context);
-                      //Navigator.of(context).pushNamed('/main');
+                      Navigator.of(context).pushNamed('/admin');
                     },
                   ),
                 ],

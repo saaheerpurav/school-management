@@ -21,7 +21,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   String email = FirebaseAuth.instance.currentUser.email;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference schools = FirebaseFirestore.instance.collection('schools');
+  CollectionReference schools =
+      FirebaseFirestore.instance.collection('schools');
 
   List allTeachers;
 
@@ -42,7 +43,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     super.initState();
-    schools.where('email', isEqualTo: email)
+    schools
+        .where('email', isEqualTo: email)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -50,21 +52,24 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         setState(() {
           schoolName = data['name'];
           schoolCode = data['school_code'];
+          allTeachers = [];
         });
       });
-    });
-
-    users
-        .where('school_code', isEqualTo: "fy8clieax")
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) async {
-        var data = doc.data();
-        data['profile_picture_url'] = await getUrl(data['email']);
-
+    }).whenComplete(() {
+      users
+          .where('school_code', isEqualTo: schoolCode)
+          .snapshots()
+          .listen((QuerySnapshot querySnapshot) {
         setState(() {
-          if (allTeachers == null) allTeachers = [];
-          allTeachers.add(data);
+          allTeachers = [];
+        });
+        querySnapshot.docs.forEach((doc) async {
+          var data = doc.data();
+          data['profile_picture_url'] = await getUrl(data['email']);
+
+          setState(() {
+            allTeachers.add(data);
+          });
         });
       });
     });
@@ -148,7 +153,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                 ),
                                 Container(
                                   width: 200,
-                                  child: Text(
+                                  child: SelectableText(
                                     "School Code - ${schoolCode ?? ""}",
                                     textDirection: TextDirection.ltr,
                                     style: TextStyle(

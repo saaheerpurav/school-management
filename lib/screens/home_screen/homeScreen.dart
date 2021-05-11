@@ -5,6 +5,7 @@ import 'package:school_management/screens/home_screen/components/task_container.
 import 'package:school_management/screens/home_screen/components/class_container.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
 import 'package:school_management/screens/home_screen/components/join_school_form.dart';
+import 'package:school_management/screens/admin_home_screen/components/teacherContainer.dart';
 
 import 'package:school_management/functions.dart';
 
@@ -38,10 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String schoolCode;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference schools = FirebaseFirestore.instance.collection('schools');
+  CollectionReference schools =
+      FirebaseFirestore.instance.collection('schools');
 
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
+  String docId;
   String profilePicUrl;
   String defaultProfilePicUrl =
       "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
@@ -80,7 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
         var data = doc.data();
 
         setState(() {
-          name = doc['name'];
+          name = data['name'];
+          schoolCode = data['school_code'];
+          docId = doc.id;
 
           allTasks = [];
           if (data['tasks'] != null) {
@@ -104,23 +109,36 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
 
-    /*schools.where('school_code', isEqualTo: schoolCode)
-    // load school code when loading user data above
-    // use this code to get school name
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        var data = doc.data();
-        setState(() {
-          schoolName = data['name'];
+    if(schoolCode != null) {
+      schools
+          .where('school_code', isEqualTo: schoolCode)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          var data = doc.data();
+          setState(() {
+            schoolName = data['name'];
+          });
         });
       });
-    });*/
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  leaveSchool(){
+    users.doc(docId).update({
+      'school_code': FieldValue.delete(),
+    }).whenComplete((){
+      setState(() {
+        schoolName = null;
+        schoolCode = null;
+      });
+    });
+    Navigator.of(context).pop();
   }
 
   @override
@@ -322,7 +340,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             schoolName == null
                                 ? Column(
                                     children: [
-                                      emptyContainer("You haven't joined a school"),
+                                      emptyContainer(
+                                          "You haven't joined a school"),
                                       TextButton(
                                         child: Text("Join a school"),
                                         onPressed: () {
@@ -336,7 +355,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                       )
                                     ],
                                   )
-                                : Text("SCHOOL")
+                                : Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          blurRadius: 20,
+                                          spreadRadius: 1,
+                                        )
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(schoolName),
+                                        Spacer(),
+                                        TextButton(
+                                          child: Text("Leave School"),
+                                          onPressed: (){
+                                            showAlert(context, "Leave School", "Are you sure you want to leave this school?", leaveSchool, "LEAVE");
+                                          }
+                                        )
+                                      ],
+                                    ),
+                                  )
                           ],
                         ),
                       ),

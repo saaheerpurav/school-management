@@ -7,7 +7,8 @@ bool validateEmail(String value) {
 }
 
 showAlert(
-    BuildContext context, String title, String text, Function onPressFunction) {
+    BuildContext context, String title, String text, Function onPressFunction,
+    [String confirmText]) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -15,8 +16,14 @@ showAlert(
         title: Text(title),
         content: Text(text),
         actions: [
+          if (confirmText != null)
+            TextButton(
+              child: Text("CANCEL"),
+              onPressed: () =>
+                  Navigator.of(context).pop(),
+            ),
           TextButton(
-            child: Text("OK"),
+            child: Text(confirmText ?? "OK"),
             onPressed: onPressFunction,
           ),
         ],

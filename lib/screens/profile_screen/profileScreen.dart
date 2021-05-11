@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
 import 'package:school_management/drawer.dart';
+import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -219,23 +220,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               'interests': interests,
                             });
 
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Success"),
-                                  content:
-                                      Text("Profile Updated Successfully!"),
-                                  actions: [
-                                    TextButton(
-                                      child: Text("OK"),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            showAlert(context, "Success", "Profile Updated Successfully!", () =>
+                                Navigator.of(context).pop());
                           },
                           child: Text(
                             "Update",
