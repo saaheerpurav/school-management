@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:school_management/screens/calendar_screen/teacherInfoScreen.dart';
 
-Widget teacherContainer(Map data) {
+Widget teacherContainer(Map data, BuildContext context) {
   String defaultProfilePicUrl =
       "https://firebasestorage.googleapis.com/v0/b/school-management-4ac50.appspot.com/o/profile_pictures%2Fdefault_image.png?alt=media&token=dfee52bd-a093-4cf3-bbf4-4e5b0b5ed22f";
 
@@ -18,7 +19,9 @@ Widget teacherContainer(Map data) {
       ],
     ),
     child: TextButton(
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => TeacherInfoScreen(data)),
+      ),
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all<Color>(
           Colors.black,

@@ -22,7 +22,7 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
     "Blood Group",
     "Contact",
     "Email",
-    "Adhaar Card Number"
+    "Aadhaar Number"
   ];
 
   var newListMap = {};

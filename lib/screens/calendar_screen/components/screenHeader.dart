@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/functions.dart';
 
-Widget screenHeader(bool isTasks, BuildContext context) {
+Widget screenHeader(bool isTasks, BuildContext context, [String title]) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 15),
     margin: EdgeInsets.only(bottom: 10),
@@ -21,7 +21,11 @@ Widget screenHeader(bool isTasks, BuildContext context) {
           ),
         ),
         Text(
-          isTasks ? "Your Tasks" : "${getMonthName(DateTime.parse(DateTime.now().toString()).month)} ",
+          isTasks
+              ? title == null
+                  ? "Your Tasks"
+                  : title
+              : "${getMonthName(DateTime.parse(DateTime.now().toString()).month)} ",
           textDirection: TextDirection.ltr,
           style: TextStyle(
             decoration: TextDecoration.none,

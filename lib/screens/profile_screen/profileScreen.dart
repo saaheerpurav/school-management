@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 "age": information[2],
                                 "blood_group": information[3],
                                 "contact": information[4],
-                                "adhaar_no": information[6],
+                                "aadhaar_no": information[6],
                               },
                               'skills': skills,
                               'interests': interests,

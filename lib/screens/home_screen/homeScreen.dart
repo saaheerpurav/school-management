@@ -322,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(height: 20),
                             sectionHeader(
                               "YOUR ACHIEVEMENTS",
-                              context,
                             ),
                             allAchievements == null
                                 ? emptyContainer("You have no achievements")

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget sectionHeader(String title, BuildContext context, [String route]) {
+Widget sectionHeader(String title, [BuildContext context, String route]) {
   return Container(
     margin: EdgeInsets.only(bottom: 5),
     child: Row(

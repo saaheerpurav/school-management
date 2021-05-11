@@ -185,7 +185,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           children: <Widget>[
                             sectionHeader(
                               "TEACHERS",
-                              context,
                             ),
                             allTeachers == null
                                 ? Center(
@@ -197,7 +196,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                     : Column(
                                         children: allTeachers
                                             .map(
-                                              (e) => teacherContainer(e),
+                                              (e) => teacherContainer(e, context),
                                             )
                                             .toList(),
                                       )
