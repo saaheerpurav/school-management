@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:school_management/screens/calendar_screen/components/screenHeader.dart';
 import 'package:school_management/screens/calendar_screen/components/calendarDay.dart';
-//import 'package:school_management/screens/calendar_screen/components/calendarEvent.dart';
+import 'package:school_management/screens/calendar_screen/components/calendarEvent.dart';
+
+import 'package:school_management/functions.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ClassesCalendarScreen extends StatefulWidget {
   @override
@@ -9,112 +15,68 @@ class ClassesCalendarScreen extends StatefulWidget {
 }
 
 class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
-  /*Map<String, List> classes = {
-    "2": [
-      calendarEvent(
-        "09:00",
-        "AM",
-        "1h mins",
-        "English Literature - Class IV",
-        "Figures of Speech",
-        "Room 3F, 1st Floor",
-      ),
-    ],
-    "3": [
-      calendarEvent(
-        "08:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-    ],
-    "4": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "5": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "6": [
-      calendarEvent(
-        "08:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-      calendarEvent(
-        "09:30",
-        "AM",
-        "1h",
-        "Maths - Class IV",
-        "Squares and Cubes",
-        "Room 3D, 2nd Floor",
-      ),
-      calendarEvent(
-        "11:00",
-        "AM",
-        "1h",
-        "Geography - Class X",
-        "Natural Regions of the World",
-        "Room 10D, 5th Floor",
-      ),
-      calendarEvent(
-        "12:00",
-        "AM",
-        "1h",
-        "Dance - Class VIII",
-        "Salsa",
-        "Hall, 2nd Floor",
-      ),
-      calendarEvent(
-        "1:00",
-        "PM",
-        "1h",
-        "Craft - Class III",
-        "Creating Pen Stand",
-        "Room 2C, 2nd Floor",
-      ),
-    ],
-    "7": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-    "8": [
-      calendarEvent(
-        "10:30",
-        "AM",
-        "1h 30 mins",
-        "Maths - Class III",
-        "Division",
-        "Room 2C, 1st Floor",
-      ),
-    ],
-  };*/
-  Map<String, List> classes;
-  int selectedDate = 6;
+  List days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  List dates = [];
+
+  List classes;
+  int selectedDate = DateTime.now().day;
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  String email = FirebaseAuth.instance.currentUser.email;
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (var day in days) {
+      int dayToAdd = DateTime.now().day + (days.indexOf(day) - DateTime.now().weekday);
+      if(dayToAdd <= 0) dayToAdd += (getDaysInMonth() - 1); // -1 from getDaysInMonth because dayToAdd can be -1, so 31 + (-1) = 30
+      dates.add(dayToAdd);
+    }
+    users
+        .where('email', isEqualTo: email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        var data = doc.data();
+
+        setState(() {
+          classes = data['classes'] == null ? [] : [...data['classes']];
+        });
+      });
+    });
+  }
+
+  Widget noClassesText = Text(
+    "You have no classes",
+    style: TextStyle(
+      decoration: TextDecoration.none,
+      fontSize: 20,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w600,
+      color: Color(0XFF263064),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -144,16 +106,7 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
                           ),
                         ),
                         child: classes == null
-                            ? Text(
-                                "You have no classes",
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontSize: 20,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0XFF263064),
-                                ),
-                              )
+                            ? noClassesText
                             : Column(
                                 children: <Widget>[
                                   Padding(
@@ -163,54 +116,27 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
-                                        calendarDay("S", 2, selectedDate == 2,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 2;
-                                          });
-                                        }),
-                                        calendarDay("M", 3, selectedDate == 3,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 3;
-                                          });
-                                        }),
-                                        calendarDay("T", 4, selectedDate == 4,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 4;
-                                          });
-                                        }),
-                                        calendarDay("W", 5, selectedDate == 5,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 5;
-                                          });
-                                        }),
-                                        calendarDay("T", 6, selectedDate == 6,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 6;
-                                          });
-                                        }),
-                                        calendarDay("F", 7, selectedDate == 7,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 7;
-                                          });
-                                        }),
-                                        calendarDay("S", 8, selectedDate == 8,
-                                            () {
-                                          setState(() {
-                                            selectedDate = 8;
-                                          });
-                                        }),
+                                        for (var date in dates)
+                                          calendarDay(
+                                              days[dates.indexOf(date)][0],
+                                              date,
+                                              selectedDate == date, () {
+                                            setState(() {
+                                              selectedDate = date;
+                                            });
+                                          }),
                                       ],
                                     ),
                                   ),
-                                  for (var i
-                                      in classes[selectedDate.toString()])
-                                    i
+                                  for (var i in classes)
+                                    if (selectedDate ==
+                                        dates[days.indexOf(i['day'])])
+                                      CalendarEvent(
+                                        i['time'].split(" ")[0],
+                                        i['time'].split(" ")[1],
+                                        i['name'],
+                                        i['class'],
+                                      )
                                 ],
                               ),
                       ),

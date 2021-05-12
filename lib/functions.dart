@@ -148,3 +148,11 @@ String getCorrectDateFormat(Map data) {
 
   return "${DateTime.now().year}-${getMonthInt(data['month'])}-$day";
 }
+
+int getDaysInMonth(){
+  //print(getMonthName(DateTime.now().month));
+  //return 30;
+  var firstDayThisMonth = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day); // doesnt work for february
+  var firstDayNextMonth = DateTime(firstDayThisMonth.year, firstDayThisMonth.month + 1, firstDayThisMonth.day);
+  return firstDayNextMonth.difference(firstDayThisMonth).inDays;
+}

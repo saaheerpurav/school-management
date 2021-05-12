@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:school_management/screens/calendar_screen/components/screenHeader.dart';
 import 'package:school_management/screens/calendar_screen/components/teacherInfoRow.dart';
+import 'package:school_management/screens/calendar_screen/components/classScheduleForm.dart';
+
 import 'package:school_management/screens/home_screen/components/section_header.dart';
+import 'package:school_management/screens/home_screen/components/class_container.dart';
 
 import 'package:school_management/data/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,6 +31,17 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+  scheduleClass(Map data) {
+    users.doc(widget.data['doc_id']).update({
+      'classes': FieldValue.arrayUnion([data]),
+    }).whenComplete(() {
+      setState(() {
+        if (widget.data['classes'] == null) widget.data['classes'] = [];
+        widget.data['classes'].add(data);
+      });
+    });
+  }
+
   giveAchievement(String type) {
     users.doc(widget.data['doc_id']).update({
       'achievements': FieldValue.arrayUnion([type]),
@@ -39,6 +53,18 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
       });
       Navigator.of(context).pop();
     });
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -193,6 +219,24 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
                                 ),
                               ),
                             ),
+                            if (data['classes'] != null)
+                              Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  sectionHeader("CLASSES"),
+                                  Container(
+                                    height:
+                                        data['classes'].length >= 2 ? 130 : 60,
+                                    width: double.infinity,
+                                    child: ListView(
+                                        padding: EdgeInsets.only(right: 10),
+                                        children: [
+                                          for (var e in data['classes'])
+                                            classContainer(e)
+                                        ]),
+                                  ),
+                                ],
+                              ),
                             if (data['achievements'] != null)
                               Column(
                                 children: [
@@ -260,10 +304,18 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
                                 ),
                                 TextButton(
                                   child: Text("Schedule Class"),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ClassScheduleForm(scheduleClass);
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
+                            SizedBox(height: 20),
                           ],
                         ),
                       ),

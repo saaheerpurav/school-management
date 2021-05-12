@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 
-Widget calendarDay(String dayName, int dayNum, bool selected, Function onPressFunction) {
+Widget calendarDay(
+    String dayName, int dayNum, bool selected, Function onPressFunction) {
+
   return Container(
     width: 45,
     decoration: BoxDecoration(
       color: selected ? Color(0XFF3632b3) : null,
       borderRadius: BorderRadius.circular(10),
     ),
-
     child: TextButton(
       onPressed: onPressFunction,
       style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-              )
-          )
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       ),
 
-      /*decoration: BoxDecoration(
-        color: selected ? Color(0XFF3632b3) : null,
-        borderRadius: BorderRadius.circular(10),
-      ),*/
       child: Column(
         children: <Widget>[
           Text(

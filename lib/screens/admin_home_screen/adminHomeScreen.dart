@@ -209,7 +209,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                     : Column(
                                         children: allTeachers
                                             .map(
-                                              (e) => teacherContainer(e, context),
+                                              (e) =>
+                                                  teacherContainer(e, context),
                                             )
                                             .toList(),
                                       )

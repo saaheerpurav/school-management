@@ -241,7 +241,6 @@ class _TasksCalendarScreenState extends State<TasksCalendarScreen> {
                                             (e) => CalendarEvent(
                                               e['deadline'],
                                               e['month'],
-                                              "",
                                               e['task'],
                                               e['description'],
                                               e['deadlineMessage'],

@@ -18,18 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  /*List<Map> allClasses = [
-    {
-      'time': '08:00',
-      'title': 'Geography - Class X',
-      'room': 'Room 10D, 5th Floor',
-    },
-    {
-      'time': '09:30',
-      'title': 'English Literature - Class IV',
-      'room': 'Room 3F, 1st Floor',
-    },
-  ];*/
   List<Map> allClasses;
   List<Map> allTasks;
   List<String> allAchievements;
@@ -84,7 +72,17 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           name = data['name'];
           schoolCode = data['school_code'];
-          allAchievements = data['achievements'] == null ? [] : [...data['achievements']];
+          allAchievements =
+              data['achievements'] == null ? [] : [...data['achievements']];
+
+          allClasses = [];
+          if (data['classes'] != null) {
+            for (var class_ in data['classes']) {
+              if (class_['day'].substring(0, 3) ==
+                  getDayName(DateTime.now().weekday)) allClasses.add(class_);
+            }
+          }
+
           docId = doc.id;
 
           allTasks = [];
@@ -155,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.parse(DateTime.now().toString());
+    var date = DateTime.now();
     var formattedDate = "${date.day} ${getMonthName(date.month)}";
 
     return Container(
@@ -289,14 +287,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               '/main/classes',
                             ),
                             allClasses == null
-                                ? emptyContainer("You have no classes")
-                                : Column(
-                                    children: allClasses
-                                        .map(
-                                          (e) => classContainer(e),
-                                        )
-                                        .toList(),
-                                  ),
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : allClasses.isEmpty
+                                    ? emptyContainer("You have no classes today")
+                                    : Container(
+                                        height: allClasses.length >= 2 ? 130 : 60,
+                                        width: double.infinity,
+                                        child: ListView(
+                                          padding: EdgeInsets.zero,
+                                          children: allClasses
+                                              .map(
+                                                (e) => classContainer(e),
+                                              )
+                                              .toList(),
+                                        ),
+                                      ),
                             SizedBox(height: 20),
                             sectionHeader(
                               "YOUR TASKS",
@@ -328,24 +335,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             allAchievements == null
                                 ? Center(
-                              child: CircularProgressIndicator(),
-                            )
+                                    child: CircularProgressIndicator(),
+                                  )
                                 : allAchievements.isEmpty
-                                ? emptyContainer("You have no achievements")
-                                : Row(
-                                    children: [
-                                      for (var e in allAchievements)
-                                        Card(
-                                          elevation: 18.0,
-                                          color: Colors.transparent,
-                                          shape: CircleBorder(),
-                                          child: Image.asset(
-                                            'images/badges/$e.png',
-                                            height: 60,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
+                                    ? emptyContainer("You have no achievements")
+                                    : Row(
+                                        children: [
+                                          for (var e in allAchievements)
+                                            Card(
+                                              elevation: 18.0,
+                                              color: Colors.transparent,
+                                              shape: CircleBorder(),
+                                              child: Image.asset(
+                                                'images/badges/$e.png',
+                                                height: 60,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                             SizedBox(height: 20),
                             sectionHeader(
                               "YOUR SCHOOL",

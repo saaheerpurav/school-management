@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class CalendarEvent extends StatelessWidget {
   final String timeNum;
   final String timeType;
-  final String duration;
   final String title;
   final String topic;
   final String room;
@@ -13,9 +12,10 @@ class CalendarEvent extends StatelessWidget {
   final bool isTasks;
   final Color taskColor;
 
-  CalendarEvent(this.timeNum, this.timeType, this.duration, this.title,
-      this.topic, this.room,
-      [this.alertDialog,
+  CalendarEvent(this.timeNum, this.timeType, this.title,
+      [this.topic,
+      this.room,
+      this.alertDialog,
       this.deleteBox,
       this.status = "",
       this.isTasks = false,
@@ -63,19 +63,6 @@ class CalendarEvent extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-              Spacer(),
-              Text(
-                duration,
-                textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-              ),
-              SizedBox(width: 20),
             ],
           ),
           Container(
@@ -86,7 +73,7 @@ class CalendarEvent extends StatelessWidget {
               color: isTasks ? taskColor.withOpacity(0.2) : Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isTasks ? Colors.white : Color(0xFFeeeeee),
+                color: isTasks ? Colors.white : Colors.grey.withOpacity(0.5),
               ),
             ),
             child: Column(
@@ -118,14 +105,14 @@ class CalendarEvent extends StatelessWidget {
                           ),
                   ],
                 ),
-                SizedBox(height: 7),
-                topic == null
+                if(isTasks) SizedBox(height: 7),
+                topic == null || topic.trim() == ""
                     ? Container(
                         width: 0,
                         height: 0,
                       )
                     : Container(
-                        margin: EdgeInsets.only(bottom: 7),
+                        margin: EdgeInsets.only(bottom: isTasks ? 7 : 0, top: isTasks ? 0 : 3),
                         child: Text(
                           topic,
                           textDirection: TextDirection.ltr,
@@ -138,54 +125,46 @@ class CalendarEvent extends StatelessWidget {
                           ),
                         ),
                       ),
-                status == null
-                    ? Container(
-                        width: 0,
-                        height: 0,
-                      )
-                    : Text(
-                        "Status: $status",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blueGrey,
-                        ),
-                      ),
+                if (isTasks == true)
+                  Text(
+                    "Status: $status",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: 13,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
                 Row(
                   children: <Widget>[
-                    isTasks
-                        ? Container(
-                            width: 8,
-                            height: 8,
-                            margin: EdgeInsets.only(right: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: taskColor,
-                            ),
-                          )
-                        : Icon(
-                            Icons.location_on_sharp,
-                            color: Colors.grey.withOpacity(0.7),
-                            size: 17,
-                          ),
-                    Container(
-                      padding: EdgeInsets.only(left: 7),
-                      width: 150,
-                      child: Text(
-                        room,
-                        textDirection: TextDirection.ltr,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blueGrey,
+                    if (isTasks == true)
+                      Container(
+                        width: 8,
+                        height: 8,
+                        margin: EdgeInsets.only(right: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: taskColor,
                         ),
                       ),
-                    ),
+                    if (room != null)
+                      Container(
+                        padding: EdgeInsets.only(left: 7),
+                        width: 150,
+                        child: Text(
+                          room,
+                          textDirection: TextDirection.ltr,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            fontSize: 13,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ),
                     Spacer(),
                     isTasks
                         ? Row(
