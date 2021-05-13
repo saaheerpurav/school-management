@@ -49,10 +49,21 @@ class _ClassesCalendarScreenState extends State<ClassesCalendarScreen> {
     super.initState();
 
     for (var day in days) {
-      int dayToAdd = DateTime.now().day + (days.indexOf(day) - DateTime.now().weekday);
-      if(dayToAdd <= 0) dayToAdd += (getDaysInMonth() - 1); // -1 from getDaysInMonth because dayToAdd can be -1, so 31 + (-1) = 30
+      int dayToAdd = DateTime.now().day + (days.indexOf(day) - (DateTime.now().weekday == 7 ? 0 : DateTime.now().weekday));
+
+      if (dayToAdd <= 0) dayToAdd += (getDaysInMonth() - 1); // -1 from getDaysInMonth because dayToAdd can be -1, so 31 + (-1) = 30
       dates.add(dayToAdd);
+
+      if (dayToAdd == getDaysInMonth()) break;
     }
+
+    if (dates.length != 7) {
+      var condition = 7 - dates.length;
+      for (var x = 1; x <= condition; x++) {
+        dates.add(x);
+      }
+    }
+
     users
         .where('email', isEqualTo: email)
         .get()

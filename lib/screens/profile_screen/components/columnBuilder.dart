@@ -28,6 +28,12 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
   var newListMap = {};
 
   createWidget(key, value) {
+    TextInputType inputType = TextInputType.text;
+    if(widget.labels){
+      if(informationLabels[key] == "Contact") inputType = TextInputType.phone;
+      else if(informationLabels[key] == "Age" || informationLabels[key] == "Aadhaar Number") inputType = TextInputType.number;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,6 +63,7 @@ class _ColumnBuilderState extends State<ColumnBuilder> {
             onChanged: (text) {
               widget.callback(text, widget.type, key);
             },
+            keyboardType: inputType,
             decoration: InputDecoration(
               border: InputBorder.none,
               focusedBorder: InputBorder.none,

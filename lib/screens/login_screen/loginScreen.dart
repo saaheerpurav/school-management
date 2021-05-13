@@ -80,8 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         idToken: googleAuth.idToken,
       );
 
-      UserCredential user =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
       setState(() {
         email = user.user.email;
       });

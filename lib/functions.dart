@@ -19,8 +19,7 @@ showAlert(
           if (confirmText != null)
             TextButton(
               child: Text("CANCEL"),
-              onPressed: () =>
-                  Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context).pop(),
             ),
           TextButton(
             child: Text(confirmText ?? "OK"),
@@ -149,10 +148,35 @@ String getCorrectDateFormat(Map data) {
   return "${DateTime.now().year}-${getMonthInt(data['month'])}-$day";
 }
 
-int getDaysInMonth(){
-  //print(getMonthName(DateTime.now().month));
-  //return 30;
-  var firstDayThisMonth = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day); // doesnt work for february
-  var firstDayNextMonth = DateTime(firstDayThisMonth.year, firstDayThisMonth.month + 1, firstDayThisMonth.day);
-  return firstDayNextMonth.difference(firstDayThisMonth).inDays;
+bool isLeapYear(int year) {
+  bool isLeap = false;
+
+  if (year % 4 == 0) {
+    if (year % 100 == 0) {
+      if (year % 400 == 0)
+        isLeap = true;
+      else
+        isLeap = false;
+    } else
+      isLeap = true;
+  } else {
+    isLeap = false;
+  }
+  return isLeap;
+}
+
+int getDaysInMonth() {
+  var date = DateTime.now();
+
+  if (getMonthName(date.month) == "February") {
+    if (isLeapYear(date.year))
+      return 29;
+    else
+      return 28;
+  } else {
+    var firstDayThisMonth = DateTime(date.year, date.month, date.day);
+    var firstDayNextMonth = DateTime(firstDayThisMonth.year,
+        firstDayThisMonth.month + 1, firstDayThisMonth.day);
+    return firstDayNextMonth.difference(firstDayThisMonth).inDays;
+  }
 }
