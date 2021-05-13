@@ -5,15 +5,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:school_management/drawer.dart';
 
 import 'package:school_management/screens/home_screen/homeScreen.dart';
-import 'package:school_management/screens/login_screen/loginScreen.dart';
 import 'package:school_management/screens/profile_screen/profileScreen.dart';
 import 'package:school_management/screens/about_screen/aboutScreen.dart';
-
 import 'package:school_management/screens/admin_home_screen/adminHomeScreen.dart';
+import 'package:school_management/screens/chat_screen/chatScreen.dart';
 
+import 'package:school_management/screens/login_signup_select_screen/loginSignupSelectScreen.dart';
+import 'package:school_management/screens/login_screen/loginScreen.dart';
 import 'package:school_management/screens/signup_screen/signupScreen.dart';
 import 'package:school_management/screens/signup_school_screen/signupSchoolScreen.dart';
-import 'package:school_management/screens/login_signup_select_screen/loginSignupSelectScreen.dart';
 
 import 'package:school_management/screens/calendar_screen/classesCalendarScreen.dart';
 import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.dart';
@@ -36,6 +36,7 @@ Future<void> main() async {
         '/main/classes': (_) => ClassesCalendarScreen(),
         '/main/tasks': (_) => TasksCalendarScreen(),
         '/admin': (_) => BottomNavigator("school"),
+        '/chat': (_) => BottomNavigator("both"),
       },
     ),
   );
@@ -84,10 +85,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
               ? <Widget>[
                   HomeScreen(),
                   ProfileScreen(),
+                  ChatScreen(),
                 ]
               : <Widget>[
                   AdminHomeScreen(),
-                  ProfileScreen(),
+                  ChatScreen(),
                 ],
         ),
       ),
@@ -121,6 +123,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                       : Icon(Icons.account_box_outlined),
                   label: "Profile",
                 ),
+                BottomNavigationBarItem(
+                  icon: _index == 2
+                      ? Icon(Icons.chat_bubble)
+                      : Icon(Icons.chat_bubble_outline),
+                  label: "Chat",
+                ),
               ]
             : [
                 BottomNavigationBarItem(
@@ -131,9 +139,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                 ),
                 BottomNavigationBarItem(
                   icon: _index == 1
-                      ? Icon(Icons.account_box)
-                      : Icon(Icons.account_box_outlined),
-                  label: "Profile",
+                      ? Icon(Icons.chat_bubble)
+                      : Icon(Icons.chat_bubble_outline),
+                  label: "Chat",
                 ),
               ],
       ),

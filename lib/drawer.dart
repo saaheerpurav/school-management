@@ -72,7 +72,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       });
     }
     else{
-      print("Error");
+      debugPrint("Error");
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:school_management/screens/admin_home_screen/components/teacherContainer.dart';
 import 'package:school_management/screens/home_screen/components/section_header.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
+import 'package:school_management/screens/home_screen/components/drawerIcon.dart';
 
 import 'package:school_management/functions.dart';
 
@@ -104,7 +105,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               child: IntrinsicHeight(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.only(right: 20),
                       margin: EdgeInsets.only(bottom: 10),
@@ -113,14 +113,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              IconButton(
-                                onPressed: () =>
-                                    Scaffold.of(context).openDrawer(),
-                                icon: Icon(
-                                  Icons.menu,
-                                  color: Color(0XFF263064),
-                                ),
-                              ),
+                              drawerIcon(context),
                               Spacer(),
                               Text(
                                 "${getDayName(date.weekday)} ",

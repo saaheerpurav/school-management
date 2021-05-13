@@ -18,24 +18,9 @@ class _ClassScheduleFormState extends State<ClassScheduleForm> {
 
   void callTimePicker() async {
     var time = await getTime();
-    String timeType = "AM";
-    int hour;
-    String minute;
-
     if (time != null) {
-      if (time.hour >= 12) {
-        hour = time.hour - 12;
-        timeType = "PM";
-      } else {
-        hour = time.hour;
-        timeType = "AM";
-      }
-      if (hour == 0) hour = 12;
-      time.minute == 0 ? minute = "00" : minute = time.minute.toString();
-      if(minute.length == 1) minute = "0$minute";
-
       setState(() {
-        classTime = "$hour:$minute $timeType";
+        classTime = dateToReadableTime(time);
       });
     }
   }

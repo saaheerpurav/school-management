@@ -90,7 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
           Navigator.of(context).pop();
         });
       } catch (e) {
-        debugPrint(e);
+        debugPrint(e.toString());
       }
     }
 

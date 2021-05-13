@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:school_management/screens/profile_screen/components/tabBar.dart';
+import 'package:school_management/screens/home_screen/components/drawerIcon.dart';
+
 import 'package:school_management/drawer.dart';
 import 'package:school_management/functions.dart';
 
@@ -111,18 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 constraints: BoxConstraints(minHeight: constraint.maxHeight),
                 child: IntrinsicHeight(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 10),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: ()=>Scaffold.of(context).openDrawer(),
-                          icon: Icon(
-                            Icons.menu,
-                            color: Color(0XFF263064),
-                          ),
-                        ),
-                      ),
+                      drawerIcon(context),
                       Center(
                         child: Stack(
                           children: [

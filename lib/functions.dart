@@ -180,3 +180,22 @@ int getDaysInMonth() {
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 }
+
+String dateToReadableTime(var date){
+  String timeType = "AM";
+  int hour;
+  String minute;
+
+  if (date.hour >= 12) {
+    hour = date.hour - 12;
+    timeType = "PM";
+  } else {
+    hour = date.hour;
+    timeType = "AM";
+  }
+  if (hour == 0) hour = 12;
+  date.minute == 0 ? minute = "00" : minute = date.minute.toString();
+  if(minute.length == 1) minute = "0$minute";
+
+  return "$hour:$minute $timeType";
+}

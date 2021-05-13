@@ -5,6 +5,7 @@ import 'package:school_management/screens/home_screen/components/task_container.
 import 'package:school_management/screens/home_screen/components/class_container.dart';
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
 import 'package:school_management/screens/home_screen/components/join_school_form.dart';
+import 'package:school_management/screens/home_screen/components/drawerIcon.dart';
 
 import 'package:school_management/functions.dart';
 
@@ -167,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IntrinsicHeight(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.only(right: 20),
                       margin: EdgeInsets.only(bottom: 10),
@@ -175,21 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              IconButton(
-                                onPressed: () =>
-                                    Scaffold.of(context).openDrawer(),
-                                icon: Icon(
-                                  Icons.menu,
-                                  color: Color(0XFF263064),
-                                ),
-                              ),
+                              drawerIcon(context),
                               Spacer(),
                               Text(
                                 "${getDayName(date.weekday)} ",
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
-                                  fontSize: 15.0,
+                                  fontSize: 15,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
                                   color: Color(0XFF263064),
@@ -200,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
-                                  fontSize: 15.0,
+                                  fontSize: 15,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   color: Color(0XFF263064),
@@ -343,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           for (var e in allAchievements)
                                             Card(
-                                              elevation: 18.0,
+                                              elevation: 18,
                                               color: Colors.transparent,
                                               shape: CircleBorder(),
                                               child: Image.asset(
