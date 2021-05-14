@@ -118,6 +118,7 @@ class _ClassScheduleFormState extends State<ClassScheduleForm> {
                 'day': weekday,
                 'time': classTime,
                 'class': standard,
+                'notificationAdded': false,
               });
               Navigator.of(context).pop();
             } else {

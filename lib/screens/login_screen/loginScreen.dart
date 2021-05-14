@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:school_management/screens/login_screen/components/rounded_input.dart';
 import 'package:school_management/screens/login_screen/components/rounded_button.dart';
 import 'package:school_management/screens/signup_screen/components/google_button.dart';
+import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'package:school_management/functions.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -80,7 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
         idToken: googleAuth.idToken,
       );
 
-      UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential user =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       setState(() {
         email = user.user.email;
       });

@@ -6,12 +6,15 @@ import 'package:school_management/screens/home_screen/components/class_container
 import 'package:school_management/screens/home_screen/components/empty_container.dart';
 import 'package:school_management/screens/home_screen/components/join_school_form.dart';
 import 'package:school_management/screens/home_screen/components/drawerIcon.dart';
-
 import 'package:school_management/functions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Map> todayClasses;
   List<Map> allClasses;
   List<Map> allTasks;
   List<String> allAchievements;
@@ -29,6 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference schools =
       FirebaseFirestore.instance.collection('schools');
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  NotificationDetails platformChannelSpecifics;
 
   String name = "";
   String email = FirebaseAuth.instance.currentUser.email;
@@ -60,9 +68,36 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future scheduleNotification(
+      int id, String title, String description, var time) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      description,
+      time,
+      platformChannelSpecifics,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      platformChannelSpecifics = NotificationDetails(
+        android: AndroidNotificationDetails(
+          'id',
+          'Class Reminder',
+          'Reminds the teacher about the class 5 minutes before it.',
+          importance: Importance.max,
+          priority: Priority.max,
+          showWhen: true,
+        ),
+      );
+    });
+
     users
         .where('email', isEqualTo: email)
         .snapshots()
@@ -76,11 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
           allAchievements =
               data['achievements'] == null ? [] : [...data['achievements']];
 
+          todayClasses = [];
           allClasses = [];
           if (data['classes'] != null) {
             for (var class_ in data['classes']) {
+              allClasses.add(class_);
               if (class_['day'].substring(0, 3) ==
-                  getDayName(DateTime.now().weekday)) allClasses.add(class_);
+                  getDayName(DateTime.now().weekday)) todayClasses.add(class_);
             }
           }
 
@@ -107,8 +144,34 @@ class _HomeScreenState extends State<HomeScreen> {
         if (data['school_code'] != null) {
           getSchoolNameFromCode(data['school_code']);
         }
-        getUrl();
       });
+      getUrl();
+
+      if (allClasses != null && docId != null) {
+        bool shouldUpdate = false;
+        int counter = 0;
+
+        for (var class_ in allClasses) {
+          if (class_['day'].substring(0, 3) ==
+                  getDayName(DateTime.now().weekday) &&
+              !class_['notificationAdded']) {
+            scheduleNotification(
+              counter,
+              "Reminder",
+              "Your ${class_['name']} class with ${class_['class']} starts in 5 minutes.",
+              readableTimeToDate(class_['time'], true),
+            );
+            class_['notificationAdded'] = true;
+            shouldUpdate = true;
+          }
+          counter += 1;
+        }
+        if (shouldUpdate) {
+          users.doc(docId).update({
+            'classes': allClasses,
+          });
+        }
+      }
     });
   }
 
@@ -279,18 +342,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               '/main/classes',
                             ),
-                            allClasses == null
+                            todayClasses == null
                                 ? Center(
                                     child: CircularProgressIndicator(),
                                   )
-                                : allClasses.isEmpty
-                                    ? emptyContainer("You have no classes today")
+                                : todayClasses.isEmpty
+                                    ? emptyContainer(
+                                        "You have no classes today")
                                     : Container(
-                                        height: allClasses.length >= 2 ? 130 : 60,
+                                        height:
+                                            todayClasses.length >= 2 ? 130 : 60,
                                         width: double.infinity,
                                         child: ListView(
                                           padding: EdgeInsets.zero,
-                                          children: allClasses
+                                          children: todayClasses
                                               .map(
                                                 (e) => classContainer(e),
                                               )

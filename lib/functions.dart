@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 bool validateEmail(String value) {
   return RegExp(
@@ -181,7 +182,7 @@ int getDaysInMonth() {
   }
 }
 
-String dateToReadableTime(var date){
+String dateToReadableTime(var date) {
   String timeType = "AM";
   int hour;
   String minute;
@@ -195,7 +196,35 @@ String dateToReadableTime(var date){
   }
   if (hour == 0) hour = 12;
   date.minute == 0 ? minute = "00" : minute = date.minute.toString();
-  if(minute.length == 1) minute = "0$minute";
+  if (minute.length == 1) minute = "0$minute";
 
   return "$hour:$minute $timeType";
+}
+
+readableTimeToDate(String time, [isReminder = false]) {
+  String hour = time.split(":")[0];
+  String minute = (time.split(":")[1]).split(" ")[0];
+  String timeType = (time.split(":")[1]).split(" ")[1];
+
+  DateTime currentDate = DateTime.now();
+  String currentMonth = currentDate.month.toString();
+  String currentDay = currentDate.day.toString();
+
+  if (timeType == "PM" && hour != "12")
+    hour = (12 + int.parse(hour)).toString();
+  if (timeType == "PM" && hour == "12") hour = "12";
+  if (timeType == "AM" && hour == "12") hour = "00";
+
+  if (currentMonth.length == 1) currentMonth = "0$currentMonth";
+  if (currentDay.length == 1) currentDay = "0$currentDay";
+  if (currentDay.length == 1) currentDay = "0$currentDay";
+  if (hour.toString().length == 1) hour = "0$hour";
+  if (minute.toString().length == 1) minute = "0$minute";
+
+  DateTime newDate = DateTime.parse(
+      "${currentDate.year}-$currentMonth-$currentDay $hour:$minute");
+
+  if (isReminder) newDate = newDate.subtract(Duration(minutes: 5));
+
+  return tz.TZDateTime.parse(tz.local, newDate.toString());
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 import 'package:school_management/drawer.dart';
-
 import 'package:school_management/screens/home_screen/homeScreen.dart';
 import 'package:school_management/screens/profile_screen/profileScreen.dart';
 import 'package:school_management/screens/about_screen/aboutScreen.dart';
@@ -18,9 +22,39 @@ import 'package:school_management/screens/signup_school_screen/signupSchoolScree
 import 'package:school_management/screens/calendar_screen/classesCalendarScreen.dart';
 import 'package:school_management/screens/calendar_screen/tasksCalendarScreen.dart';
 
+Future<void> initNotifications(
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('ic_stat_logo');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+  });
+}
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+NotificationAppLaunchDetails notificationAppLaunchDetails;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  notificationAppLaunchDetails =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  await initNotifications(flutterLocalNotificationsPlugin);
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(
+      tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()));
 
   runApp(
     MaterialApp(
