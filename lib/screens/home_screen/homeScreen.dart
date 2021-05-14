@@ -164,6 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
             class_['notificationAdded'] = true;
             shouldUpdate = true;
           }
+          else if(class_['day'].substring(0, 3) !=
+              getDayName(DateTime.now().weekday)){
+            class_['notificationAdded'] = false;
+            shouldUpdate = true;
+          }
           counter += 1;
         }
         if (shouldUpdate) {
