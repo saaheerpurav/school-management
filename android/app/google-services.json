@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "378721189532-n2trgpqep3phniuhifl09i0tvrubq0f6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.saaheerpurav.school_management",
+            "certificate_hash": "00203306e49addb568c47069cb9a455ac8798b13"
+          }
+        },
+        {
           "client_id": "378721189532-0ok5db3900c42ucvh9ktrvnpnu58ir2g.apps.googleusercontent.com",
           "client_type": 3
         }

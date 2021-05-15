@@ -147,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       getUrl();
 
-      if (allClasses != null && docId != null) {
+      if (allClasses != null && allClasses.isNotEmpty && docId != null) {
+
         bool shouldUpdate = false;
         int counter = 0;
 
@@ -207,15 +208,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   leaveSchool() {
+    setState(() {
+      schoolName = null;
+      schoolCode = null;
+      allAchievements = [];
+      allClasses = null;
+      todayClasses = null;
+    });
+
     users.doc(docId).update({
       'school_code': FieldValue.delete(),
       'achievements': FieldValue.delete(),
-    }).whenComplete(() {
-      setState(() {
-        schoolName = null;
-        schoolCode = null;
-        allAchievements = [];
-      });
+      'classes': FieldValue.delete(),
     });
     Navigator.of(context).pop();
   }

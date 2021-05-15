@@ -70,22 +70,24 @@ class _TeacherInfoScreenState extends State<TeacherInfoScreen> {
   @override
   void initState() {
     super.initState();
-    for (var item in widget.data['skills']) {
-      setState(() {
-        skillColorIndex != colors.length - 1
-            ? skillColorIndex += 1
-            : skillColorIndex = 0;
-        skills.add(skillInterestItem(item, colors[skillColorIndex]));
-      });
-    }
-    for (var item in widget.data['interests']) {
-      setState(() {
-        interestColorIndex != colors.length - 1
-            ? interestColorIndex += 1
-            : interestColorIndex = 0;
-        interests.add(skillInterestItem(
-            item, colors[colors.length - 1 - interestColorIndex]));
-      });
+    if (widget.data['skills'] != null && widget.data['interests'] != null) {
+      for (var item in widget.data['skills']) {
+        setState(() {
+          skillColorIndex != colors.length - 1
+              ? skillColorIndex += 1
+              : skillColorIndex = 0;
+          skills.add(skillInterestItem(item, colors[skillColorIndex]));
+        });
+      }
+      for (var item in widget.data['interests']) {
+        setState(() {
+          interestColorIndex != colors.length - 1
+              ? interestColorIndex += 1
+              : interestColorIndex = 0;
+          interests.add(skillInterestItem(
+              item, colors[colors.length - 1 - interestColorIndex]));
+        });
+      }
     }
   }
 
